@@ -7,6 +7,7 @@ import Button from "@mui/material/Button";
 import Link from "next/link";
 import { Box } from "@mui/system";
 import Image from "next/image";
+import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 
 const Home: NextPage = () => {
   const [width, setWidth] = useState<number>(0);
@@ -61,7 +62,7 @@ const Home: NextPage = () => {
           >
             <Grid item sm={3}>
               <div id="calendar-box">
-                {/* <FontAwesomeIcon icon={faCalendar} /> */}
+                <CalendarMonthIcon />
                 <h5>2022</h5>
               </div>
             </Grid>
@@ -69,13 +70,19 @@ const Home: NextPage = () => {
               <Box textAlign={width <= 950 ? "center" : "left"}>
                 <h1 id="mylist-title">My playlist</h1>
                 <h4 id="by-haeju">by Haeju</h4>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  sx={{ borderRadius: 20, marginTop: 2 }}
-                >
-                  <Link href="/playlist">check out the playlists</Link>
-                </Button>
+                <Link href="/playlist" passHref>
+                  <Button
+                    variant="contained"
+                    color="secondary"
+                    sx={{
+                      borderRadius: 20,
+                      marginTop: 2,
+                      fontWeight: "bold",
+                    }}
+                  >
+                    check out playlists
+                  </Button>
+                </Link>
               </Box>
             </Grid>
             <Grid item sm={4}>
@@ -85,7 +92,7 @@ const Home: NextPage = () => {
               >
                 <p>
                   Songs that I listen / listened in 2022<br></br>
-                  Just testing out React, Material UI<br></br>
+                  Just testing out NEXT.js,TS,Material UI<br></br>
                   with Spotify API for fun
                 </p>
               </Box>

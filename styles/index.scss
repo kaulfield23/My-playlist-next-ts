@@ -1,0 +1,59 @@
+.index-main {
+    font-family: "nunito";
+    text-align: center;
+    .index-profile {
+        background-color: black;
+        box-shadow: 12px 12px 15px 5px rgba(172, 81, 218, 0.426);
+    }
+    color: white;
+    .playlist-intro {
+        margin-top: 10px;
+        padding-bottom: 70px;
+        @media screen and (max-width: 950px) {
+            margin-top: 60px;
+            display: flex;
+            flex-direction: column;
+            row-gap: 30px;
+        }
+    }
+    #mylist-title {
+        font-size: 3.5rem;
+        @include mobile {
+            font-size: 2rem;
+        }
+    }
+    h5 {
+        color: $c-gray;
+        font-size: 2rem;
+        @include mobile {
+            font-size: 20px;
+            color: $c-gray;
+        }
+    }
+    #index-img img {
+        width: 100%;
+    }
+    #index-img::after {
+        display: block;
+        position: relative;
+        background-image: linear-gradient( to bottom, rgba(0, 0, 0, 0) 0, rgb(0, 0, 0) 100%);
+        margin-top: -290px;
+        height: 290px;
+        @include mobile {
+            margin-top: -150px;
+            height: 150px;
+        }
+        width: 100%;
+        content: "";
+    }
+    #check-out {
+        color: rgb(68, 68, 68);
+        text-decoration: none;
+        font-family: "nunito";
+        font-weight: bolder;
+    }
+}
+
+.musicIcon {
+    color: #613a72;
+}

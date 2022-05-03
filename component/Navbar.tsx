@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { styled } from "@mui/material/styles";
 import {
   AppBar,
@@ -12,6 +12,8 @@ import {
 import Link from "next/link";
 import { Box } from "@mui/system";
 import MusicNoteIcon from "@mui/icons-material/MusicNote";
+import Drawer from "./Drawer";
+import { useRouter } from "next/router";
 
 const CustomTab = styled(Tab, {
   shouldForwardProp: (props) => props !== "sx",
@@ -31,17 +33,25 @@ const CustomTab = styled(Tab, {
   },
 }));
 
-const menus = [
-  { name: "Playlist", path: "/playlist" },
-  { name: "IDK", path: "/idk" },
-  { name: "Temporary", path: "/temporary" },
-  { name: "About me", path: "/aboutme" },
-];
-
 const Navbar = () => {
-  const [value, setValue] = useState(0);
+  const [value, setValue] = useState<number>(0);
   const theme = useTheme();
   const isMobileSize = useMediaQuery(theme.breakpoints.down("md"));
+  const router = useRouter();
+  const menus = [
+    { name: "Playlist", path: "/playlist" },
+    { name: "IDK", path: "/idk" },
+    { name: "Temporary", path: "/temporary" },
+    { name: "About me", path: "/aboutme" },
+  ];
+
+  useEffect(() => {
+    const path = router.pathname;
+    const pathMenu = ["/playlist", "/idk", "/temporary", "/aboutme"];
+    const currentPath = pathMenu.findIndex((item) => item === path);
+    if (!currentPath) return;
+    setValue(currentPath);
+  }, [router]);
 
   return (
     <>
@@ -69,7 +79,7 @@ const Navbar = () => {
                   My playlist
                 </Typography>
               </Link>
-              {/* <DrawerMUI /> */}
+              <Drawer />
             </>
           ) : (
             <>
