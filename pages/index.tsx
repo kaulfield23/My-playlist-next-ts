@@ -9,6 +9,7 @@ import { Box } from "@mui/system";
 import Image from "next/image";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 
+const AUTH_URL = `https://accounts.spotify.com/authorize?client_id=57d2e6a20ac547dab1320ff810ac1b7d&response_type=code&redirect_uri=http://localhost:3000&scope=streaming%20user-read-email%20user-read-private%20user-library-read%20user-library-modify%20user-read-playback-state%20user-modify-playback-state`;
 const Home: NextPage = () => {
   const [width, setWidth] = useState<number>(0);
   useEffect(() => {
@@ -70,7 +71,7 @@ const Home: NextPage = () => {
               <Box textAlign={width <= 950 ? "center" : "left"}>
                 <h1 id="mylist-title">My playlist</h1>
                 <h4 id="by-haeju">by Haeju</h4>
-                <Link href="/playlist" passHref>
+                <Link href={AUTH_URL} passHref>
                   <Button
                     variant="contained"
                     color="secondary"
@@ -80,7 +81,7 @@ const Home: NextPage = () => {
                       fontWeight: "bold",
                     }}
                   >
-                    check out playlists
+                    Login with Spotify
                   </Button>
                 </Link>
               </Box>

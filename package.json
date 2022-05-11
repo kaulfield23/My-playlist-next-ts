@@ -16,12 +16,14 @@
     "next": "12.1.5",
     "react": "18.1.0",
     "react-dom": "18.1.0",
-    "sass": "^1.51.0"
+    "sass": "^1.51.0",
+    "spotify-web-api-node": "^5.0.2"
   },
   "devDependencies": {
     "@types/node": "17.0.31",
     "@types/react": "18.0.8",
     "@types/react-dom": "18.0.3",
+    "@types/spotify-web-api-node": "^5.0.7",
     "eslint": "8.14.0",
     "eslint-config-next": "12.1.5",
     "typescript": "4.6.4"
