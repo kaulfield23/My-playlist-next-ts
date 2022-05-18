@@ -1,5 +1,4 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { env } from "process";
 import SpotifyWebApi from "spotify-web-api-node";
 
 export default async function loginHandler(
