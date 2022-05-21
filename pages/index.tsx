@@ -1,54 +1,18 @@
 import { useMediaQuery, useTheme, Grid } from "@mui/material";
-import type { GetServerSideProps, NextPage } from "next";
+import type { NextPage } from "next";
 import React, { useEffect, useState } from "react";
-import profile from "../component/img/profile-pic.jpg";
-import bigProfile from "../component/img/big-profile.jpg";
+import profile from "../src/img/profile-pic.jpg";
+import bigProfile from "../src/img/big-profile.jpg";
 import Button from "@mui/material/Button";
 import Link from "next/link";
 import { Box } from "@mui/system";
 import Image from "next/image";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
-import { useRouter } from "next/router";
 
-const AUTH_URL = `https://accounts.spotify.com/authorize?client_id=57d2e6a20ac547dab1320ff810ac1b7d&response_type=code&redirect_uri=http://localhost:3000&scope=streaming%20user-read-email%20user-read-private%20user-library-read%20user-library-modify%20user-read-playback-state%20user-modify-playback-state`;
+const AUTH_URL = `https://accounts.spotify.com/authorize?client_id=57d2e6a20ac547dab1320ff810ac1b7d&response_type=code&redirect_uri=http://localhost:3000/playlist&scope=streaming%20user-read-email%20user-read-private%20user-library-read%20user-library-modify%20user-read-playback-state%20user-modify-playback-state`;
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const code = context.query.code as string;
-
-  const res = await fetch(`http://localhost:3000/api/login`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ code }),
-  });
-  const responseData = await res.json();
-
-  return {
-    props: {
-      code: code ?? "",
-      accessToken: responseData.accessToken,
-      refreshToken: responseData.refreshToken,
-      expiresIn: responseData.expiresIn,
-    },
-  };
-};
-type Code = {
-  code: string | undefined;
-  accessToken: string;
-  refreshToken: string;
-  expiresIn: string;
-};
-
-const Home: NextPage<Code> = ({
-  code,
-  accessToken,
-  refreshToken,
-  expiresIn,
-}) => {
+const Home: NextPage = () => {
   const [width, setWidth] = useState<number>(0);
-  const [tokens, setTokens] = useState<string>("");
-  const router = useRouter();
   useEffect(() => {
     function handleResize() {
       setWidth(window.innerWidth);
@@ -56,12 +20,11 @@ const Home: NextPage<Code> = ({
 
     window.addEventListener("resize", handleResize);
 
-    setTokens(accessToken);
     handleResize();
     return () => {
       window.removeEventListener("resize", handleResize);
     };
-  }, [setWidth, accessToken]);
+  }, [setWidth]);
 
   const theme = useTheme();
   const isSmall = useMediaQuery(theme.breakpoints.down("sm"));
@@ -131,10 +94,9 @@ const Home: NextPage<Code> = ({
                 textAlign={width <= 950 ? "center" : "left"}
               >
                 <p>
-                  {/* Songs that I listen / listened in 2022<br></br>
+                  Songs that I listen / listened in 2022<br></br>
                   Just testing out NEXT.js,TS,Material UI<br></br>
-                  with Spotify API for fun */}
-                  {tokens}
+                  with Spotify API for fun
                 </p>
               </Box>
             </Grid>

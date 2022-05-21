@@ -6,9 +6,12 @@ export default async function loginHandler(
   res: NextApiResponse
 ) {
   const { code } = req.body;
+
   if (req.method === "POST" && code) {
+    const protocol = req.headers["x-forwarded-proto"] ?? "http";
+
     const SpotifyApi = new SpotifyWebApi({
-      redirectUri: `http://localhost:3000`,
+      redirectUri: `${protocol}://${req.headers.host}/playlist`,
       clientId: "57d2e6a20ac547dab1320ff810ac1b7d",
       clientSecret: process.env.CLIENT_SECRET,
     });
@@ -17,12 +20,13 @@ export default async function loginHandler(
     res.json({
       accessToken: data.body.access_token,
       refreshToken: data.body.refresh_token,
-      expiresIn: data.body.expires_in,
+      expiresIn: 61,
+    });
+  } else {
+    res.json({
+      accessToken: null,
+      refreshToken: null,
+      expiresIn: null,
     });
   }
-  res.json({
-    accessToken: null,
-    refreshToken: null,
-    expiresIn: null,
-  });
 }
