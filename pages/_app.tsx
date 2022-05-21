@@ -1,10 +1,10 @@
 import "../styles/globals.scss";
 import type { AppProps } from "next/app";
-import Navbar from "../component/Navbar";
 import { StyledEngineProvider, ThemeProvider } from "@mui/material";
 import { theme } from "../styles/theme";
 import Head from "next/head";
 import { useRouter } from "next/router";
+import Navbar from "../src/components/Navbar";
 function MyApp({ Component, pageProps }: AppProps) {
   const router = useRouter();
   const path = router.pathname;

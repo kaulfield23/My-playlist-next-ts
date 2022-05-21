@@ -1,15 +1,16 @@
 import { useMediaQuery, useTheme, Grid } from "@mui/material";
 import type { NextPage } from "next";
 import React, { useEffect, useState } from "react";
-import profile from "../component/img/profile-pic.jpg";
-import bigProfile from "../component/img/big-profile.jpg";
+import profile from "../src/img/profile-pic.jpg";
+import bigProfile from "../src/img/big-profile.jpg";
 import Button from "@mui/material/Button";
 import Link from "next/link";
 import { Box } from "@mui/system";
 import Image from "next/image";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 
-const AUTH_URL = `https://accounts.spotify.com/authorize?client_id=57d2e6a20ac547dab1320ff810ac1b7d&response_type=code&redirect_uri=http://localhost:3000&scope=streaming%20user-read-email%20user-read-private%20user-library-read%20user-library-modify%20user-read-playback-state%20user-modify-playback-state`;
+const AUTH_URL = `https://accounts.spotify.com/authorize?client_id=57d2e6a20ac547dab1320ff810ac1b7d&response_type=code&redirect_uri=http://localhost:3000/playlist&scope=streaming%20user-read-email%20user-read-private%20user-library-read%20user-library-modify%20user-read-playback-state%20user-modify-playback-state`;
+
 const Home: NextPage = () => {
   const [width, setWidth] = useState<number>(0);
   useEffect(() => {
@@ -20,11 +21,11 @@ const Home: NextPage = () => {
     window.addEventListener("resize", handleResize);
 
     handleResize();
-
     return () => {
       window.removeEventListener("resize", handleResize);
     };
   }, [setWidth]);
+
   const theme = useTheme();
   const isSmall = useMediaQuery(theme.breakpoints.down("sm"));
 
@@ -71,6 +72,7 @@ const Home: NextPage = () => {
               <Box textAlign={width <= 950 ? "center" : "left"}>
                 <h1 id="mylist-title">My playlist</h1>
                 <h4 id="by-haeju">by Haeju</h4>
+
                 <Link href={AUTH_URL} passHref>
                   <Button
                     variant="contained"
