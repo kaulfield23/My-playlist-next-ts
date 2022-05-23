@@ -5,6 +5,7 @@ import { theme } from "../styles/theme";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import Navbar from "../src/components/Navbar";
+import NewTokenProvider from "../src/components/newToken";
 function MyApp({ Component, pageProps }: AppProps) {
   const router = useRouter();
   const path = router.pathname;
@@ -17,8 +18,10 @@ function MyApp({ Component, pageProps }: AppProps) {
       </Head>
       <StyledEngineProvider>
         <ThemeProvider theme={theme}>
-          {path !== "/" ? <Navbar /> : ""}
-          <Component {...pageProps} />
+          <NewTokenProvider>
+            {path !== "/" ? <Navbar /> : ""}
+            <Component {...pageProps} />
+          </NewTokenProvider>
         </ThemeProvider>
       </StyledEngineProvider>
     </>
