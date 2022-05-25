@@ -34,6 +34,7 @@ export async function UseAuth(code: string | string[] | undefined) {
     if (!refreshToken || !expiresIn) return;
     const fetchData = () => {
       const interval = setInterval(async () => {
+        localStorage.removeItem("token");
         const res = await fetch(`/api/refresh`, {
           method: "POST",
           headers: {

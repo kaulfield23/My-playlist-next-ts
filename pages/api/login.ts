@@ -1,3 +1,4 @@
+import Cookies from "cookies";
 import { NextApiRequest, NextApiResponse } from "next";
 import SpotifyWebApi from "spotify-web-api-node";
 
@@ -17,7 +18,10 @@ export default async function loginHandler(
     });
 
     const data = await SpotifyApi.authorizationCodeGrant(code);
-    console.log("token???????");
+
+    const cookies = new Cookies(req, res);
+    cookies.set("session", data.body.access_token);
+
     res.json({
       accessToken: data.body.access_token,
       refreshToken: data.body.refresh_token,

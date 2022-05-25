@@ -13,7 +13,6 @@ export default async function refreshHandler(
       clientSecret: process.env.CLIENT_SECRET,
       refreshToken,
     });
-    console.log("refresh");
     const data = await SpotifyApi.refreshAccessToken();
     res.json({
       accessToken: data.body.access_token,
