@@ -4,9 +4,10 @@ import { useEffect, useRef, useState } from "react";
 export async function UseAuth(code: string | string[] | undefined) {
   const [accessToken, setAccessToken] = useState<string>("");
   const [refreshToken, setRefreshToken] = useState<string>("");
-  const [expiresIn, setExpiresIn] = useState<string>("");
+  const [expiresIn, setExpiresIn] = useState<number>(0);
 
   const push = usePush();
+  const reload = useReload();
   useEffect(() => {
     if (code === undefined) return;
     const fetchData = async () => {
@@ -19,18 +20,21 @@ export async function UseAuth(code: string | string[] | undefined) {
           code,
         }),
       });
+      console.log("what what what");
       const response = await res.json();
       setAccessToken(response.accessToken);
       setRefreshToken(response.refreshToken);
-      setExpiresIn(response.expiresIn);
+      setExpiresIn(65);
       if (response.accessToken) {
         push("/playlist");
       }
     };
+
     fetchData();
   }, [code, push]);
 
   useEffect(() => {
+    console.log("eyeyey");
     if (!refreshToken || !expiresIn) return;
     const fetchData = () => {
       const interval = setInterval(async () => {
@@ -46,17 +50,22 @@ export async function UseAuth(code: string | string[] | undefined) {
         });
         const response = await res.json();
         setAccessToken(response.accessToken);
-        setExpiresIn(response.expiresIn);
-      }, (parseInt(expiresIn) - 60) * 1000);
-      return clearInterval(interval);
+        setExpiresIn(65);
+        localStorage.setItem("token", response.accessToken);
+
+        if (response.accessToken) {
+          push("/playlist");
+        }
+      }, (expiresIn - 60) * 1000);
+      return () => clearInterval(interval);
     };
     fetchData();
-  }, [refreshToken, expiresIn]);
+  }, [refreshToken, expiresIn, push]);
 
   return accessToken;
 }
 
-export default function usePush(): NextRouter["push"] {
+export function usePush(): NextRouter["push"] {
   const router = useRouter();
   const routerRef = useRef(router);
 
@@ -67,4 +76,17 @@ export default function usePush(): NextRouter["push"] {
   });
 
   return push;
+}
+
+export function useReload(): NextRouter["reload"] {
+  const router = useRouter();
+  const routerRef = useRef(router);
+
+  routerRef.current = router;
+
+  const [{ reload }] = useState<Pick<NextRouter, "reload">>({
+    reload: () => routerRef.current.reload(),
+  });
+
+  return reload;
 }
