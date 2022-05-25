@@ -17,10 +17,11 @@ export default async function loginHandler(
     });
 
     const data = await SpotifyApi.authorizationCodeGrant(code);
+    console.log("token???????");
     res.json({
       accessToken: data.body.access_token,
       refreshToken: data.body.refresh_token,
-      expiresIn: 61,
+      expiresIn: data.body.expires_in,
     });
   } else {
     res.json({

@@ -13,15 +13,14 @@ export default async function refreshHandler(
       clientSecret: process.env.CLIENT_SECRET,
       refreshToken,
     });
-    console.log("what");
+    console.log("refresh");
     const data = await SpotifyApi.refreshAccessToken();
     res.json({
       accessToken: data.body.access_token,
-      refreshToken: data.body.refresh_token,
-      expiresIn: 61,
+      expiresIn: data.body.expires_in,
     });
   } catch (err) {
-    // console.log(err);
+    console.log(err);
     res.status(400).end();
   }
 }

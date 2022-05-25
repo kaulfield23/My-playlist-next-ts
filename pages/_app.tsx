@@ -18,10 +18,10 @@ function MyApp({ Component, pageProps }: AppProps) {
       </Head>
       <StyledEngineProvider>
         <ThemeProvider theme={theme}>
-          <NewTokenProvider>
-            {path !== "/" ? <Navbar /> : ""}
-            <Component {...pageProps} />
-          </NewTokenProvider>
+          {/* <NewTokenProvider> */}
+          {path !== "/" ? <Navbar /> : ""}
+          <Component {...pageProps} />
+          {/* </NewTokenProvider> */}
         </ThemeProvider>
       </StyledEngineProvider>
     </>
