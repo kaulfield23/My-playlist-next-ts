@@ -1,3 +1,4 @@
+import Cookies from "cookies";
 import { NextApiRequest, NextApiResponse } from "next";
 import SpotifyWebApi from "spotify-web-api-node";
 
@@ -11,13 +12,16 @@ export default async function loginHandler(
     const protocol = req.headers["x-forwarded-proto"] ?? "http";
 
     const SpotifyApi = new SpotifyWebApi({
-      redirectUri: `${protocol}://${req.headers.host}/playlist`,
+      redirectUri: `${protocol}://${req.headers.host}`,
       clientId: "57d2e6a20ac547dab1320ff810ac1b7d",
       clientSecret: process.env.CLIENT_SECRET,
     });
 
     const data = await SpotifyApi.authorizationCodeGrant(code);
-    console.log("token???????");
+
+    const cookies = new Cookies(req, res);
+    cookies.set("session", data.body.access_token);
+
     res.json({
       accessToken: data.body.access_token,
       refreshToken: data.body.refresh_token,

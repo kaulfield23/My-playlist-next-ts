@@ -29,9 +29,9 @@ const DrawerMUI = () => {
         <List>
           {menus.map((menu, index) => {
             return (
-              <ListItemButton onClick={() => setOpenDrawer(false)} key={index}>
-                <ListItemIcon>
-                  <Link href={menu.path} passHref>
+              <Link href={menu.path} passHref key={index}>
+                <ListItemButton onClick={() => setOpenDrawer(false)}>
+                  <ListItemIcon>
                     <ListItemText
                       primaryTypographyProps={{
                         color: "purple",
@@ -43,9 +43,9 @@ const DrawerMUI = () => {
                     >
                       {menu.name}
                     </ListItemText>
-                  </Link>
-                </ListItemIcon>
-              </ListItemButton>
+                  </ListItemIcon>
+                </ListItemButton>
+              </Link>
             );
           })}
           <Divider />

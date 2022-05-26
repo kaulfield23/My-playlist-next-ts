@@ -3,4 +3,10 @@ export type TokenTypes = {
   accessToken: string;
   refreshToken: string;
   expiresIn: string;
+  ssrCode: string | undefined;
+  items: [
+    {
+      images: [{ url: string }];
+    }
+  ];
 };

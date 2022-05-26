@@ -1,6 +1,6 @@
 import { useMediaQuery, useTheme, Grid } from "@mui/material";
 import type { NextPage } from "next";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import profile from "../src/img/profile-pic.jpg";
 import bigProfile from "../src/img/big-profile.jpg";
 import Button from "@mui/material/Button";
@@ -8,11 +8,13 @@ import Link from "next/link";
 import { Box } from "@mui/system";
 import Image from "next/image";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
+import { useRouter } from "next/router";
 
-const AUTH_URL = `https://accounts.spotify.com/authorize?client_id=57d2e6a20ac547dab1320ff810ac1b7d&response_type=code&redirect_uri=http://localhost:3000/playlist&scope=streaming%20user-read-email%20user-read-private%20user-library-read%20user-library-modify%20user-read-playback-state%20user-modify-playback-state`;
+const AUTH_URL = `https://accounts.spotify.com/authorize?client_id=57d2e6a20ac547dab1320ff810ac1b7d&response_type=code&redirect_uri=http://localhost:3000&scope=streaming%20user-read-email%20user-read-private%20user-library-read%20user-library-modify%20user-read-playback-state%20user-modify-playback-state`;
 
 const Home: NextPage = () => {
   const [width, setWidth] = useState<number>(0);
+
   useEffect(() => {
     function handleResize() {
       setWidth(window.innerWidth);
@@ -29,10 +31,33 @@ const Home: NextPage = () => {
   const theme = useTheme();
   const isSmall = useMediaQuery(theme.breakpoints.down("sm"));
 
+  const router = useRouter();
+  const code = router.query.code;
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const res = await fetch(`/api/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          code,
+        }),
+      });
+      const response = await res.json();
+      localStorage.setItem("refresh", response.refreshToken);
+      localStorage.setItem("expire", response.expiresIn);
+      if (response.refreshToken) window.location.href = "/playlist";
+    };
+
+    fetchData();
+  }, [code]);
+
   return (
     <>
       <Box
-        className="index-main"
+        className="index-main main"
         sx={{
           height: "100vh",
           maxWidth: "1280px",

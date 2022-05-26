@@ -1,3 +1,4 @@
+import Cookies from "cookies";
 import { NextApiRequest, NextApiResponse } from "next";
 import SpotifyWebApi from "spotify-web-api-node";
 
@@ -6,6 +7,7 @@ export default async function refreshHandler(
   res: NextApiResponse
 ) {
   try {
+    console.log("wee");
     const refreshToken = req.body.refreshToken;
     const SpotifyApi = new SpotifyWebApi({
       redirectUri: `/playlist`,
@@ -13,8 +15,10 @@ export default async function refreshHandler(
       clientSecret: process.env.CLIENT_SECRET,
       refreshToken,
     });
-    console.log("refresh");
     const data = await SpotifyApi.refreshAccessToken();
+    const cookies = new Cookies(req, res);
+    cookies.set("session", data.body.access_token);
+
     res.json({
       accessToken: data.body.access_token,
       expiresIn: data.body.expires_in,
