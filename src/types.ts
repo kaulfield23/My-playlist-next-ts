@@ -6,7 +6,7 @@ export type TokenTypes = {
   ssrCode: string | undefined;
   items: [
     {
-      name: string;
+      images: [{ url: string }];
     }
   ];
 };

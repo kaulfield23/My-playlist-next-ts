@@ -9,7 +9,6 @@ export default async function loginHandler(
   const { code } = req.body;
 
   if (req.method === "POST" && code) {
-    console.log("ssiballlllllllllllllllllleeeeeeee");
     const protocol = req.headers["x-forwarded-proto"] ?? "http";
 
     const SpotifyApi = new SpotifyWebApi({

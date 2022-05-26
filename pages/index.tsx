@@ -46,9 +46,8 @@ const Home: NextPage = () => {
         }),
       });
       const response = await res.json();
-      console.log(response.refreshToken, "responseeee");
       localStorage.setItem("refresh", response.refreshToken);
-      localStorage.setItem("expire", "85");
+      localStorage.setItem("expire", response.expiresIn);
       if (response.refreshToken) window.location.href = "/playlist";
     };
 
@@ -58,7 +57,7 @@ const Home: NextPage = () => {
   return (
     <>
       <Box
-        className="index-main"
+        className="index-main main"
         sx={{
           height: "100vh",
           maxWidth: "1280px",
