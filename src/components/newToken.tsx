@@ -16,10 +16,6 @@ export const NewTokenContext = createContext<InewTokenContextType>({
   changeCtxExpiresIn: (value: string) => ({}),
 });
 
-// const newTokenProvider: FC<PropsWithChildren<{}>> = ({ children }) => {
-//   return <NewTokenContext.Provider>{children}</NewTokenContext.Provider>;
-// };
-
 const NewTokenProvider: FC<PropsWithChildren<{}>> = ({ children }) => {
   const [ctxAccessToken, setctxAccessToken] = useState("");
   const [ctxRefreshToken, setctxRefreshToken] = useState("");
