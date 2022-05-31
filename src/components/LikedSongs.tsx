@@ -1,14 +1,15 @@
+import { TrackChangesOutlined } from "@mui/icons-material";
 import { Grid } from "@mui/material";
 import { Box } from "@mui/system";
 import Image from "next/image";
 import React, { FC } from "react";
-import { MyPlaylistProps } from "../types";
+import { MyTracklistProps } from "../types";
 
-const MyPlaylists: FC<MyPlaylistProps> = ({ playlists }) => {
+const LikedSongs: FC<MyTracklistProps> = ({ tracks }) => {
   return (
     <>
       <Box sx={{ display: "flex", flexWrap: "wrap", justifyContent: "center" }}>
-        {playlists.map((item, index) => {
+        {tracks.map((item, index) => {
           return (
             <Box
               className="playlist-box"
@@ -17,16 +18,13 @@ const MyPlaylists: FC<MyPlaylistProps> = ({ playlists }) => {
                 flexDirection: "column",
                 padding: "0.5rem",
               }}
-              key={item.name}
+              key={item.track.name}
             >
-              <Image
-                src={item.images[0].url}
-                key={index}
-                alt={"hey"}
-                width={200}
-                height={200}
-              />
-              <p className="playlist-name">{item.name}</p>
+              <p className="playlist-name">{item.track.name}</p>
+              <p className="playlist-name">{item.track.album.name}</p>
+              <p className="playlist-name">
+                {item.track.album.artists[0].name}
+              </p>
             </Box>
           );
         })}
@@ -35,4 +33,4 @@ const MyPlaylists: FC<MyPlaylistProps> = ({ playlists }) => {
   );
 };
 
-export default MyPlaylists;
+export default LikedSongs;

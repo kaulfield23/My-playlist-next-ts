@@ -1,5 +1,6 @@
 @import "_mixin.scss";
 @import "index";
+@import "playlists";
 * {
     box-sizing: border-box;
     text-decoration: none;
@@ -10,7 +11,7 @@
 }
 
 body {
-    background-color: rgb(201, 250, 218);
+    background-color: rgb(210, 248, 223);
     height: 100vh;
 }
 
