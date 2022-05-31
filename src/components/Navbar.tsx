@@ -22,7 +22,7 @@ const CustomTab = styled(Tab, {
   fontSize: "16px",
   margin: "0 18px",
   color: "white",
-  fontFamily: "nunito",
+  fontFamily: "Nunito",
   opacity: 1,
   "&:hover": {
     color: "#500950",
