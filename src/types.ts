@@ -6,6 +6,7 @@ export type PlaylistTypes = {
   ssrCode: string | undefined;
   items: [
     {
+      id: string;
       name: string;
       images: [{ url: string }];
     }
@@ -24,6 +25,7 @@ export type MyPlaylistProps = {
   playlists: [
     {
       name: string;
+      id: string;
       images: [{ url: string }];
     }
   ];
