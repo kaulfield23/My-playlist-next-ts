@@ -3,7 +3,6 @@ import { Grid, Tab } from "@mui/material";
 import { Box } from "@mui/system";
 import Cookies from "cookies";
 import type { GetServerSideProps, NextPage } from "next";
-import Image from "next/image";
 import { useEffect, useState } from "react";
 import LikedSongs from "../src/components/LikedSongs";
 import MyPlaylists from "../src/components/MyPlaylists";
