@@ -3,7 +3,6 @@ import { Grid, Tab } from "@mui/material";
 import { Box } from "@mui/system";
 import Cookies from "cookies";
 import type { GetServerSideProps, NextPage } from "next";
-import Image from "next/image";
 import { useEffect, useState } from "react";
 import LikedSongs from "../src/components/LikedSongs";
 import MyPlaylists from "../src/components/MyPlaylists";
@@ -11,42 +10,18 @@ import { RefreshingToken } from "../src/components/refreshingToken";
 import { PlaylistTypes } from "../src/types";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
+  const userId = process.env.SPOTIFY_ID;
   const cookies = new Cookies(context.req, context.res);
   const accessToken = cookies.get("session") ?? "";
-  const userId = process.env.SPOTIFY_ID;
-  let tracks;
-  let items;
-  if (accessToken) {
-    const response = await fetch(
-      `https://api.spotify.com/v1/users/${userId}/playlists `,
-      {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      }
-    );
-    const res = await response.json();
-    items = res.items;
-
-    const tracksRes = await fetch(` https://api.spotify.com/v1/me/tracks`, {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    });
-    tracks = await tracksRes.json();
-  }
-
   return {
     props: {
-      items: items ?? "",
-      tracks: tracks.items ?? "",
+      accessToken: accessToken,
+      userId: userId,
     },
   };
 };
 
-const Playlist: NextPage<PlaylistTypes> = ({ items, tracks }) => {
+const Playlist: NextPage<PlaylistTypes> = ({ accessToken, userId }) => {
   const [value, setValue] = useState("1");
 
   if (typeof window !== "undefined") {
@@ -77,10 +52,10 @@ const Playlist: NextPage<PlaylistTypes> = ({ items, tracks }) => {
               </TabList>
             </Box>
             <TabPanel value="1">
-              <MyPlaylists playlists={items} />
+              <MyPlaylists accessToken={accessToken} userId={userId} />
             </TabPanel>
             <TabPanel value="2">
-              <LikedSongs tracks={tracks} />
+              <LikedSongs accessToken={accessToken} />
             </TabPanel>
           </TabContext>
         </Box>
