@@ -1,43 +1,37 @@
 export type PlaylistTypes = {
   code: string | undefined;
   accessToken: string;
+  userId: string;
   refreshToken: string;
   expiresIn: string;
   ssrCode: string | undefined;
-  items: [
-    {
-      id: string;
-      name: string;
-      images: [{ url: string }];
-    }
-  ];
-  tracks: [
-    {
-      track: {
-        name: string;
-        album: { name: string; artists: [{ name: string }] };
-      };
-    }
-  ];
+  // items: [
+  //   {
+  //     id: string;
+  //     name: string;
+  //     images: [{ url: string }];
+  //   }
+  // ];
+  // tracks: [
+  //   {
+  //     track: {
+  //       name: string;
+  //       album: { name: string; artists: [{ name: string }] };
+  //     };
+  //   }
+  // ];
 };
 
+export type ListType = {
+  name: string;
+  id: string;
+  images: [{ url: string }];
+};
 export type MyPlaylistProps = {
-  playlists: [
-    {
-      name: string;
-      id: string;
-      images: [{ url: string }];
-    }
-  ];
+  accessToken: string;
+  userId: string;
 };
 
 export type MyTracklistProps = {
-  tracks: [
-    {
-      track: {
-        name: string;
-        album: { name: string; artists: [{ name: string }] };
-      };
-    }
-  ];
+  accessToken: string;
 };

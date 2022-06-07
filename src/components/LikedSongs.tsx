@@ -5,11 +5,11 @@ import Image from "next/image";
 import React, { FC } from "react";
 import { MyTracklistProps } from "../types";
 
-const LikedSongs: FC<MyTracklistProps> = ({ tracks }) => {
+const LikedSongs: FC<MyTracklistProps> = ({ accessToken }) => {
   return (
     <>
       <Box sx={{ display: "flex", flexWrap: "wrap", justifyContent: "center" }}>
-        {tracks.map((item, index) => {
+        {/* {tracks.map((item, index) => {
           return (
             <Box
               className="playlist-box"
@@ -27,7 +27,7 @@ const LikedSongs: FC<MyTracklistProps> = ({ tracks }) => {
               </p>
             </Box>
           );
-        })}
+        })} */}
       </Box>
     </>
   );
