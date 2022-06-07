@@ -1,4 +1,4 @@
-import { Grow, Zoom } from "@mui/material";
+import { Grow } from "@mui/material";
 import { Box } from "@mui/system";
 import Image from "next/image";
 import React, {
@@ -11,18 +11,22 @@ import React, {
   Reducer,
 } from "react";
 import EachPlaylist from "./EachPlaylist";
-import { MyPlaylistProps } from "../types";
+import { ListType, MyPlaylistProps } from "../types";
 
-type ListType = {
-  name: string;
-  id: string;
-  images: [{ url: string }];
-};
-const reducer = (state: { after: number }, action: { type: string }) => {
+const reducer = (
+  state: { after: number; data: [] },
+  action: { type: string; datas: [] }
+) => {
   if (action.type === "start") {
     return { ...state, loading: true };
   } else if (action.type === "loaded") {
-    return { ...state, loading: false, after: (state.after = state.after + 6) };
+    return {
+      ...state,
+      loading: false,
+      data: [...state.data, ...action.datas],
+      after: (state.after = state.after + 6),
+      more: state.data.length < action.datas.length,
+    };
   } else {
     throw new Error(`Don't understand the action`);
   }
@@ -37,9 +41,10 @@ const MyPlaylists: FC<MyPlaylistProps> = ({ accessToken, userId }) => {
     loading: false,
     more: true,
     after: 6,
+    data: [],
   });
 
-  const { loading, after } = state;
+  const { loading, more, after } = state;
   useEffect(() => {
     const getPlaylists = async (accessToken: string, userId: string) => {
       if (accessToken) {
@@ -89,7 +94,9 @@ const MyPlaylists: FC<MyPlaylistProps> = ({ accessToken, userId }) => {
                     display: "flex",
                     flexDirection: "column",
                     padding: "0.5rem",
+                    cursor: "pointer",
                   }}
+                  onClick={() => handlePlaylist(item.id)}
                 >
                   <Image
                     className="playlistsImg"
@@ -98,7 +105,6 @@ const MyPlaylists: FC<MyPlaylistProps> = ({ accessToken, userId }) => {
                     alt={"hey"}
                     width={200}
                     height={200}
-                    onClick={() => handlePlaylist(item.id)}
                   />
                   <p className="playlist-name">{item.name}</p>
                 </Box>
@@ -107,13 +113,11 @@ const MyPlaylists: FC<MyPlaylistProps> = ({ accessToken, userId }) => {
           })}
         </Box>
       )}
-      {loading && <h2>hello</h2>}
-      {!loading && (
+      {!loading && more && (
         <>
           <Box
             onClick={() => {
-              dispatch({ type: "start" });
-              dispatch({ type: "loaded" });
+              dispatch({ type: "loaded", datas });
             }}
           >
             <button>Loard more</button>
