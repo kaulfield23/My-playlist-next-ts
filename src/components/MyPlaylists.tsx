@@ -1,50 +1,42 @@
-import { Grow } from "@mui/material";
+import { Button, Grow } from "@mui/material";
 import { Box } from "@mui/system";
 import Image from "next/image";
-import React, {
-  FC,
-  useState,
-  useRef,
-  useEffect,
-  RefObject,
-  useReducer,
-  Reducer,
-} from "react";
+import React, { FC, useState, useEffect, useContext, useRef } from "react";
 import EachPlaylist from "./EachPlaylist";
 import { ListType, MyPlaylistProps } from "../types";
-
-const reducer = (
-  state: { after: number; data: [] },
-  action: { type: string; datas: [] }
-) => {
-  if (action.type === "start") {
-    return { ...state, loading: true };
-  } else if (action.type === "loaded") {
-    return {
-      ...state,
-      loading: false,
-      data: [...state.data, ...action.datas],
-      after: (state.after = state.after + 6),
-      more: state.data.length < action.datas.length,
-    };
-  } else {
-    throw new Error(`Don't understand the action`);
-  }
-};
+import { LoadContext } from "./LoadContext";
 
 const MyPlaylists: FC<MyPlaylistProps> = ({ accessToken, userId }) => {
   const [showPlaylists, setShowPlaylists] = useState<boolean>(true);
   const [playlistID, setPlaylistID] = useState<string>("");
   const [datas, setDatas] = useState<ListType[]>([]);
+  const { state, changePerPage, load } = useContext(LoadContext);
+  const { more, after } = state;
+  const perPage = 6;
+  changePerPage(perPage);
 
-  const [state, dispatch] = useReducer<Reducer<any, any>>(reducer, {
-    loading: false,
-    more: true,
-    after: 6,
-    data: [],
-  });
+  const myRef = useRef<HTMLDivElement>(null);
+  const loader = useRef(load);
 
-  const { loading, more, after } = state;
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const first = entries[0];
+        if (first.isIntersecting) {
+          // load()
+        }
+      },
+      { threshold: 1 }
+    );
+
+    const currentObserver = myRef.current;
+    if (myRef.current !== null) observer.observe(myRef.current);
+
+    return () => {
+      if (currentObserver) observer.unobserve(currentObserver);
+    };
+  }, [myRef]);
+
   useEffect(() => {
     const getPlaylists = async (accessToken: string, userId: string) => {
       if (accessToken) {
@@ -113,14 +105,18 @@ const MyPlaylists: FC<MyPlaylistProps> = ({ accessToken, userId }) => {
           })}
         </Box>
       )}
-      {!loading && more && (
+      {more && (
         <>
           <Box
-            onClick={() => {
-              dispatch({ type: "loaded", datas });
-            }}
+            ref={myRef}
+            sx={{ textAlign: "center", margin: 4 }}
+            // onClick={() => {
+            //   load(datas.slice(after - perPage));
+            // }}
           >
-            <button>Loard more</button>
+            <Button variant="contained" color="secondary">
+              Load more
+            </Button>
           </Box>
         </>
       )}
