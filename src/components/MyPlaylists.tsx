@@ -9,21 +9,22 @@ import { LoadContext } from "./LoadContext";
 const MyPlaylists: FC<MyPlaylistProps> = ({ accessToken, userId }) => {
   const [showPlaylists, setShowPlaylists] = useState<boolean>(true);
   const [playlistID, setPlaylistID] = useState<string>("");
-  const [datas, setDatas] = useState<ListType[]>([]);
+  // const [datas, setDatas] = useState<ListType[]>([]);
   const { state, changePerPage, load } = useContext(LoadContext);
-  const { more, after } = state;
+  const { more, after, data } = state;
   const perPage = 6;
-  changePerPage(perPage);
 
   const myRef = useRef<HTMLDivElement>(null);
   const loader = useRef(load);
 
   useEffect(() => {
+    changePerPage(perPage);
     const observer = new IntersectionObserver(
       (entries) => {
         const first = entries[0];
         if (first.isIntersecting) {
-          // load()
+          // load(userId, accessToken);
+          loader.current?.(userId, accessToken);
         }
       },
       { threshold: 1 }
@@ -35,26 +36,26 @@ const MyPlaylists: FC<MyPlaylistProps> = ({ accessToken, userId }) => {
     return () => {
       if (currentObserver) observer.unobserve(currentObserver);
     };
-  }, [myRef]);
+  }, [myRef, userId, accessToken, changePerPage]);
 
-  useEffect(() => {
-    const getPlaylists = async (accessToken: string, userId: string) => {
-      if (accessToken) {
-        const response = await fetch(
-          `https://api.spotify.com/v1/users/${userId}/playlists?offset=0&limit=${after} `,
-          {
-            method: "GET",
-            headers: {
-              Authorization: `Bearer ${accessToken}`,
-            },
-          }
-        );
-        const res = await response.json();
-        if (res) setDatas(res.items);
-      }
-    };
-    getPlaylists(accessToken, userId);
-  }, [accessToken, userId, after]);
+  // useEffect(() => {
+  //   const getPlaylists = async (accessToken: string, userId: string) => {
+  //     if (accessToken) {
+  //       const response = await fetch(
+  //         `https://api.spotify.com/v1/users/${userId}/playlists?offset=0&limit=${after} `,
+  //         {
+  //           method: "GET",
+  //           headers: {
+  //             Authorization: `Bearer ${accessToken}`,
+  //           },
+  //         }
+  //       );
+  //       const res = await response.json();
+  //       if (res) setDatas(res.items);
+  //     }
+  //   };
+  //   getPlaylists(accessToken, userId);
+  // }, [accessToken, userId, after]);
 
   const handlePlaylist = (id: string) => {
     setShowPlaylists(false);
@@ -71,7 +72,7 @@ const MyPlaylists: FC<MyPlaylistProps> = ({ accessToken, userId }) => {
         <Box
           sx={{ display: "flex", flexWrap: "wrap", justifyContent: "center" }}
         >
-          {datas.map((item, index) => {
+          {data.map((item, index) => {
             return (
               <Grow
                 in={true}
