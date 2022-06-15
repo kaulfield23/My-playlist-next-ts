@@ -10,8 +10,8 @@ const MyPlaylists: FC<MyPlaylistProps> = ({ accessToken, userId }) => {
   const [showPlaylists, setShowPlaylists] = useState<boolean>(true);
   const [playlistID, setPlaylistID] = useState<string>("");
   // const [datas, setDatas] = useState<ListType[]>([]);
-  const { state, changePerPage, load } = useContext(LoadContext);
-  const { more, after, data } = state;
+  const { data, more, load, changePerPage } = useContext(LoadContext);
+  // const { more, after, data } = state;
   const perPage = 6;
 
   const myRef = useRef<HTMLDivElement>(null);
@@ -38,6 +38,9 @@ const MyPlaylists: FC<MyPlaylistProps> = ({ accessToken, userId }) => {
     };
   }, [myRef, userId, accessToken, changePerPage]);
 
+  useEffect(() => {
+    console.log(more, "more");
+  }, [more]);
   // useEffect(() => {
   //   const getPlaylists = async (accessToken: string, userId: string) => {
   //     if (accessToken) {

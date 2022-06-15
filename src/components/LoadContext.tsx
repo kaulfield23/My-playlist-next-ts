@@ -7,51 +7,55 @@ import React, {
   Reducer,
   useEffect,
 } from "react";
-export interface ILoadProvider {
-  state: {
-    more: boolean;
-    after: number;
-    data: [{ name: string; id: string; images: [{ url: string }] }];
-  };
+// export interface ILoadProvider {
+//   state: {
+//     more: boolean;
+//     after: number;
+//     data: [{ name: string; id: string; images: [{ url: string }] }];
+//   };
+//   changePerPage: (value: number) => void;
+//   load?: (value1: string, value2: string) => void;
+// }
+export type MyContextType = {
+  more: boolean;
+  data: any[];
+  after?: number;
+  load?: (value: string, value2: string) => void;
   changePerPage: (value: number) => void;
-  load?: (value1: string, value2: string) => void;
-}
+};
 
-const reducer = (
-  state: { after: number; data: [] },
-  action: { type: string; datas: []; perPage: number }
-) => {
+const reducer = (state: MyContextType, action: any) => {
   if (action.type === "loaded") {
+    console.log(state.after, action.perPage, "whyyyyyyyyyyy");
     return {
       ...state,
       data: [...state.data, ...action.datas],
-      after: state.after + action.perPage,
-      more: action.datas.length <= action.perPage,
+      after: state.after + action.datas.length,
+      more: action.datas.length === action.perPage,
     };
   } else {
     throw new Error(`Don't understand the action`);
   }
 };
-export const LoadContext = createContext<ILoadProvider>({
-  state: {
-    more: true,
-    after: 0,
-    data: [{ name: "", id: "", images: [{ url: "" }] }],
-  },
+
+const myContextDefaultValues: MyContextType = {
+  more: true,
+  data: [],
+  after: 0,
   changePerPage: (value: number) => ({}),
-  load: (value: {}) => ({}),
-});
+};
+export const LoadContext = createContext<MyContextType>(myContextDefaultValues);
 
 const LoadProvider: FC<PropsWithChildren<{}>> = ({ children }) => {
   const [perPage, setPerPage] = useState<number>(6);
   const [state, dispatch] = useReducer<Reducer<any, any>>(reducer, {
     more: true,
-    after: perPage,
+    after: 0,
     data: [],
   });
   const changePerPage = (value: number) => setPerPage(value);
 
-  const { after } = state;
+  const { data, after, more } = state;
 
   const getPlaylists = async (
     userId: string,
@@ -59,7 +63,7 @@ const LoadProvider: FC<PropsWithChildren<{}>> = ({ children }) => {
     limit: number,
     accessToken: string
   ) => {
-    console.log(offset, "eeeeeeeeee");
+    console.log(offset, limit, more);
     return fetch(
       `https://api.spotify.com/v1/users/${userId}/playlists?limit=${limit}&offset=${offset}`,
       {
@@ -73,18 +77,8 @@ const LoadProvider: FC<PropsWithChildren<{}>> = ({ children }) => {
 
   const load = async (userId: string, accessToken: string) => {
     setTimeout(async () => {
-      debugger;
-      console.log(after, "afterrrrrrrrrrrrr");
-      let result = await getPlaylists(
-        userId,
-        after - perPage,
-        after,
-        accessToken
-      );
-      dispatch({
-        type: "loaded",
-        datas: result.items,
-        perPage,
+      getPlaylists(userId, after, after + perPage, accessToken).then((data) => {
+        dispatch({ type: "loaded", datas: data.items, perPage });
       });
     }, 300);
   };
@@ -92,7 +86,8 @@ const LoadProvider: FC<PropsWithChildren<{}>> = ({ children }) => {
   return (
     <LoadContext.Provider
       value={{
-        state,
+        data,
+        more,
         changePerPage,
         load,
       }}
