@@ -3,15 +3,13 @@ import { Box } from "@mui/system";
 import Image from "next/image";
 import React, { FC, useState, useEffect, useContext, useRef } from "react";
 import EachPlaylist from "./EachPlaylist";
-import { ListType, MyPlaylistProps } from "../types";
+import { MyPlaylistProps } from "../types";
 import { LoadContext } from "./LoadContext";
 
 const MyPlaylists: FC<MyPlaylistProps> = ({ accessToken, userId }) => {
   const [showPlaylists, setShowPlaylists] = useState<boolean>(true);
   const [playlistID, setPlaylistID] = useState<string>("");
-  // const [datas, setDatas] = useState<ListType[]>([]);
-  const { data, more, load, changePerPage } = useContext(LoadContext);
-  // const { more, after, data } = state;
+  const { changePerPage, load, data, more } = useContext(LoadContext);
   const perPage = 6;
 
   const myRef = useRef<HTMLDivElement>(null);
@@ -23,7 +21,6 @@ const MyPlaylists: FC<MyPlaylistProps> = ({ accessToken, userId }) => {
       (entries) => {
         const first = entries[0];
         if (first.isIntersecting) {
-          // load(userId, accessToken);
           loader.current?.(userId, accessToken);
         }
       },
@@ -37,28 +34,6 @@ const MyPlaylists: FC<MyPlaylistProps> = ({ accessToken, userId }) => {
       if (currentObserver) observer.unobserve(currentObserver);
     };
   }, [myRef, userId, accessToken, changePerPage]);
-
-  useEffect(() => {
-    console.log(more, "more");
-  }, [more]);
-  // useEffect(() => {
-  //   const getPlaylists = async (accessToken: string, userId: string) => {
-  //     if (accessToken) {
-  //       const response = await fetch(
-  //         `https://api.spotify.com/v1/users/${userId}/playlists?offset=0&limit=${after} `,
-  //         {
-  //           method: "GET",
-  //           headers: {
-  //             Authorization: `Bearer ${accessToken}`,
-  //           },
-  //         }
-  //       );
-  //       const res = await response.json();
-  //       if (res) setDatas(res.items);
-  //     }
-  //   };
-  //   getPlaylists(accessToken, userId);
-  // }, [accessToken, userId, after]);
 
   const handlePlaylist = (id: string) => {
     setShowPlaylists(false);
@@ -75,7 +50,7 @@ const MyPlaylists: FC<MyPlaylistProps> = ({ accessToken, userId }) => {
         <Box
           sx={{ display: "flex", flexWrap: "wrap", justifyContent: "center" }}
         >
-          {data.map((item, index) => {
+          {data?.map((item, index) => {
             return (
               <Grow
                 in={true}
@@ -111,13 +86,7 @@ const MyPlaylists: FC<MyPlaylistProps> = ({ accessToken, userId }) => {
       )}
       {more && (
         <>
-          <Box
-            ref={myRef}
-            sx={{ textAlign: "center", margin: 4 }}
-            // onClick={() => {
-            //   load(datas.slice(after - perPage));
-            // }}
-          >
+          <Box ref={myRef} sx={{ textAlign: "center", margin: 4 }}>
             <Button variant="contained" color="secondary">
               Load more
             </Button>
