@@ -1,68 +1,39 @@
-import { Grow } from "@mui/material";
+import { Button, Grow } from "@mui/material";
 import { Box } from "@mui/system";
 import Image from "next/image";
-import React, {
-  FC,
-  useState,
-  useRef,
-  useEffect,
-  RefObject,
-  useReducer,
-  Reducer,
-} from "react";
+import React, { FC, useState, useEffect, useContext, useRef } from "react";
 import EachPlaylist from "./EachPlaylist";
-import { ListType, MyPlaylistProps } from "../types";
-
-const reducer = (
-  state: { after: number; data: [] },
-  action: { type: string; datas: [] }
-) => {
-  if (action.type === "start") {
-    return { ...state, loading: true };
-  } else if (action.type === "loaded") {
-    return {
-      ...state,
-      loading: false,
-      data: [...state.data, ...action.datas],
-      after: (state.after = state.after + 6),
-      more: state.data.length < action.datas.length,
-    };
-  } else {
-    throw new Error(`Don't understand the action`);
-  }
-};
+import { MyPlaylistProps } from "../types";
+import { LoadContext } from "./LoadContext";
 
 const MyPlaylists: FC<MyPlaylistProps> = ({ accessToken, userId }) => {
   const [showPlaylists, setShowPlaylists] = useState<boolean>(true);
   const [playlistID, setPlaylistID] = useState<string>("");
-  const [datas, setDatas] = useState<ListType[]>([]);
+  const { changePerPage, load, data, more } = useContext(LoadContext);
+  const perPage = 6;
 
-  const [state, dispatch] = useReducer<Reducer<any, any>>(reducer, {
-    loading: false,
-    more: true,
-    after: 6,
-    data: [],
-  });
+  const myRef = useRef<HTMLDivElement>(null);
+  const loader = useRef(load);
 
-  const { loading, more, after } = state;
   useEffect(() => {
-    const getPlaylists = async (accessToken: string, userId: string) => {
-      if (accessToken) {
-        const response = await fetch(
-          `https://api.spotify.com/v1/users/${userId}/playlists?offset=0&limit=${after} `,
-          {
-            method: "GET",
-            headers: {
-              Authorization: `Bearer ${accessToken}`,
-            },
-          }
-        );
-        const res = await response.json();
-        if (res) setDatas(res.items);
-      }
+    changePerPage(perPage);
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const first = entries[0];
+        if (first.isIntersecting) {
+          loader.current?.(userId, accessToken);
+        }
+      },
+      { threshold: 1 }
+    );
+
+    const currentObserver = myRef.current;
+    if (myRef.current !== null) observer.observe(myRef.current);
+
+    return () => {
+      if (currentObserver) observer.unobserve(currentObserver);
     };
-    getPlaylists(accessToken, userId);
-  }, [accessToken, userId, after]);
+  }, [myRef, userId, accessToken, changePerPage]);
 
   const handlePlaylist = (id: string) => {
     setShowPlaylists(false);
@@ -79,7 +50,7 @@ const MyPlaylists: FC<MyPlaylistProps> = ({ accessToken, userId }) => {
         <Box
           sx={{ display: "flex", flexWrap: "wrap", justifyContent: "center" }}
         >
-          {datas.map((item, index) => {
+          {data?.map((item, index) => {
             return (
               <Grow
                 in={true}
@@ -113,14 +84,12 @@ const MyPlaylists: FC<MyPlaylistProps> = ({ accessToken, userId }) => {
           })}
         </Box>
       )}
-      {!loading && more && (
+      {more && (
         <>
-          <Box
-            onClick={() => {
-              dispatch({ type: "loaded", datas });
-            }}
-          >
-            <button>Loard more</button>
+          <Box ref={myRef} sx={{ textAlign: "center", margin: 4 }}>
+            <Button variant="contained" color="secondary">
+              Load more
+            </Button>
           </Box>
         </>
       )}
