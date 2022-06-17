@@ -1,4 +1,5 @@
 import React, { createContext, useState, FC, PropsWithChildren } from "react";
+import { getPlaylists, getTracks } from "../data/fetchDatas";
 
 type dataType = {
   name: string;
@@ -8,48 +9,55 @@ type dataType = {
 export type MyContextType = {
   more: boolean;
   data: dataType[];
-  load?: (value: string, value2: string) => void;
-  changePerPage: (value: number) => void;
+  tracks: any[];
+  loadPlaylists?: (value: string, value2: string, value3: number) => void;
+  loadTracks?: (value: string, value2: string, value3: number) => void;
+  // changePerPage: (value: number) => void;
 };
 
 const myContextDefaultValues: MyContextType = {
   more: true,
   data: [],
+  tracks: [],
   // after: 0,
-  changePerPage: (value: number) => ({}),
+  // changePerPage: (value: number) => ({}),
 };
 export const LoadContext = createContext<MyContextType>(myContextDefaultValues);
 
 const LoadProvider: FC<PropsWithChildren<{}>> = ({ children }) => {
   const [perPage, setPerPage] = useState<number>(6);
   const [data, setData] = useState([]);
+  const [tracks, setTracks] = useState([]);
   const [more, setMore] = useState<boolean>(true);
 
-  const changePerPage = (value: number) => setPerPage(value);
-
-  const getPlaylists = async (
-    userId: string,
-    offset: number,
-    limit: number,
-    accessToken: string
-  ): Promise<{ items: [] }> => {
-    return fetch(
-      `https://api.spotify.com/v1/users/${userId}/playlists?limit=${limit}&offset=${offset}`,
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${accessToken}`,
-        },
-      }
-    ).then((response) => response.json());
-  };
+  // const changePerPage = (value: number) => setPerPage(value);
 
   let after = 0;
-  const load = async (userId: string, accessToken: string) => {
+  const loadPlaylists = async (
+    userId: string,
+    accessToken: string,
+    perPage: number
+  ) => {
     after += perPage;
-    let datas = await getPlaylists(userId, after - 6, perPage, accessToken);
+    console.log("hey");
+    let datas = await getPlaylists(
+      userId,
+      after - perPage,
+      perPage,
+      accessToken
+    );
     setMore(datas.items.length === perPage);
     setData((prevState) => [...prevState, ...datas.items]);
+  };
+
+  const loadTracks = async (
+    playlistId: string,
+    accessToken: string,
+    perPage: number
+  ) => {
+    console.log("ehy");
+    let datas = await getTracks(playlistId, accessToken);
+    setTracks(datas.items);
   };
 
   return (
@@ -57,8 +65,10 @@ const LoadProvider: FC<PropsWithChildren<{}>> = ({ children }) => {
       value={{
         data,
         more,
-        changePerPage,
-        load,
+        tracks,
+        // changePerPage,
+        loadPlaylists,
+        loadTracks,
       }}
     >
       {children}

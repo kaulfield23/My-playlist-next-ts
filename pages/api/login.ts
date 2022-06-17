@@ -13,9 +13,10 @@ export default async function loginHandler(
 
     const SpotifyApi = new SpotifyWebApi({
       redirectUri: `${protocol}://${req.headers.host}`,
-      clientId: "57d2e6a20ac547dab1320ff810ac1b7d",
+      clientId: process.env.CLIENT_ID,
       clientSecret: process.env.CLIENT_SECRET,
     });
+    console.log(process.env.CLIENT_SECRET, "secret");
 
     const data = await SpotifyApi.authorizationCodeGrant(code);
 

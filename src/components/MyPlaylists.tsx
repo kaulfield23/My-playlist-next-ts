@@ -9,19 +9,18 @@ import { LoadContext } from "./LoadContext";
 const MyPlaylists: FC<MyPlaylistProps> = ({ accessToken, userId }) => {
   const [showPlaylists, setShowPlaylists] = useState<boolean>(true);
   const [playlistID, setPlaylistID] = useState<string>("");
-  const { changePerPage, load, data, more } = useContext(LoadContext);
-  const perPage = 6;
+  const { loadPlaylists, data, more } = useContext(LoadContext);
+  const perPage = 10;
 
   const myRef = useRef<HTMLDivElement>(null);
-  const loader = useRef(load);
+  const loader = useRef(loadPlaylists);
 
   useEffect(() => {
-    changePerPage(perPage);
     const observer = new IntersectionObserver(
       (entries) => {
         const first = entries[0];
         if (first.isIntersecting) {
-          loader.current?.(userId, accessToken);
+          loader.current?.(userId, accessToken, perPage);
         }
       },
       { threshold: 1 }
@@ -33,7 +32,17 @@ const MyPlaylists: FC<MyPlaylistProps> = ({ accessToken, userId }) => {
     return () => {
       if (currentObserver) observer.unobserve(currentObserver);
     };
-  }, [myRef, userId, accessToken, changePerPage]);
+  }, [myRef, userId, accessToken]);
+
+  useEffect(() => {
+    console.log("myRef");
+  }, [myRef]);
+  useEffect(() => {
+    console.log("userId");
+  }, [userId]);
+  useEffect(() => {
+    console.log("accessToken");
+  }, [accessToken]);
 
   const handlePlaylist = (id: string) => {
     setShowPlaylists(false);
@@ -84,6 +93,13 @@ const MyPlaylists: FC<MyPlaylistProps> = ({ accessToken, userId }) => {
           })}
         </Box>
       )}
+      {!showPlaylists && (
+        <EachPlaylist
+          onClickBack={handleGoBack}
+          playlistID={playlistID}
+          accessToken={accessToken}
+        />
+      )}
       {more && (
         <>
           <Box ref={myRef} sx={{ textAlign: "center", margin: 4 }}>
@@ -92,9 +108,6 @@ const MyPlaylists: FC<MyPlaylistProps> = ({ accessToken, userId }) => {
             </Button>
           </Box>
         </>
-      )}
-      {!showPlaylists && (
-        <EachPlaylist goBack={handleGoBack} playlistID={playlistID} />
       )}
     </>
   );
