@@ -10,8 +10,14 @@ import { useRouter } from "next/router";
 const MyPlaylists: FC<MyPlaylistProps> = ({ accessToken, userId }) => {
   const [showPlaylists, setShowPlaylists] = useState<boolean>(true);
   const [playlistID, setPlaylistID] = useState<string>("");
-  const { loadPlaylists, data, more, changeMore, changeTracks } =
-    useContext(LoadContext);
+  const {
+    loadPlaylists,
+    data,
+    more,
+    changeMore,
+    playlistLoadedAll,
+    loadedAll,
+  } = useContext(LoadContext);
   const perPage = 10;
 
   const myRef = useRef<HTMLDivElement>(null);
@@ -37,8 +43,14 @@ const MyPlaylists: FC<MyPlaylistProps> = ({ accessToken, userId }) => {
     };
   }, [myRef, userId, accessToken]);
 
+  useEffect(() => {
+    if (!more) {
+      console.log("eng??????");
+      playlistLoadedAll(true);
+    }
+  }, [more, playlistLoadedAll]);
+
   const onClickPlaylist = (id: string, playlistName: string) => {
-    // changeTracks();
     changeMore(true);
     router.push({
       pathname: `/playlist/${id}`,
@@ -85,7 +97,7 @@ const MyPlaylists: FC<MyPlaylistProps> = ({ accessToken, userId }) => {
         })}
       </Box>
 
-      {more && (
+      {more && !loadedAll && (
         <>
           <Box ref={myRef} sx={{ textAlign: "center", margin: 4 }}>
             <Button variant="contained" color="secondary">

@@ -13,23 +13,28 @@ export type MyContextType = {
   more: boolean;
   data: PlaylistType[];
   tracks: TracksType[];
+  loadedAll: boolean;
   loadPlaylists?: (value: string, value2: string, value3: number) => void;
   loadTracks?: (value: string, value2: string, value3: number) => void;
   changeMore: (value: boolean) => void;
   changeTracks: () => void;
+  playlistLoadedAll: (value: boolean) => void;
 };
 
 const myContextDefaultValues: MyContextType = {
   more: true,
   data: [],
   tracks: [],
+  loadedAll: false,
   changeMore: (value: boolean) => ({}),
   changeTracks: () => ({}),
+  playlistLoadedAll: (value: boolean) => ({}),
 };
 export const LoadContext = createContext<MyContextType>(myContextDefaultValues);
 
 const LoadProvider: FC<PropsWithChildren<{}>> = ({ children }) => {
   const [data, setData] = useState([]);
+  const [loadedAll, setLoadedAll] = useState<boolean>(false);
   const [tracks, setTracks] = useState([]);
   const [more, setMore] = useState<boolean>(true);
   const router = useRouter();
@@ -41,6 +46,9 @@ const LoadProvider: FC<PropsWithChildren<{}>> = ({ children }) => {
     }
   }, [router]);
 
+  const playlistLoadedAll = (value: boolean) => {
+    setLoadedAll(value);
+  };
   const changeMore = (value: boolean) => {
     setMore(value);
   };
@@ -51,6 +59,9 @@ const LoadProvider: FC<PropsWithChildren<{}>> = ({ children }) => {
   //for limit and offset
   let after = 0;
 
+  if (router.pathname === "/playlist" && data.length > 0) {
+    after = data.length;
+  }
   //get the playlists
   const loadPlaylists = async (
     userId: string,
@@ -58,10 +69,10 @@ const LoadProvider: FC<PropsWithChildren<{}>> = ({ children }) => {
     perPage: number
   ) => {
     //for saving the data from where it stopped in playlists page
-    if (data.length > 0) {
-      after = data.length;
-    }
+
     after += perPage;
+
+    console.log(after, "after");
 
     let datas = await getPlaylists(
       userId,
@@ -97,6 +108,8 @@ const LoadProvider: FC<PropsWithChildren<{}>> = ({ children }) => {
         data,
         more,
         tracks,
+        loadedAll,
+        playlistLoadedAll() {},
         changeMore,
         loadPlaylists,
         changeTracks,

@@ -30,7 +30,7 @@ const EachPlaylist: NextPage<EachPlaylistProps> = ({
   playlistID,
   playlistName,
 }) => {
-  const { loadTracks, tracks, more, changeTracks, changeMore } =
+  const { loadTracks, tracks, more, changeTracks, changeMore, loadedAll } =
     useContext(LoadContext);
 
   const myRef = useRef<HTMLDivElement>(null);
@@ -57,8 +57,13 @@ const EachPlaylist: NextPage<EachPlaylistProps> = ({
   }, [myRef, playlistID, accessToken]);
 
   const onClickBack = () => {
-    // changeTracks();
-    // changeMore(true);
+    console.log(loadedAll, "loadallllllllllll");
+    //if the playlist hasn't loaded all playlists then show 'load more button'
+    // if (loadedAll) {
+    //   changeMore(false);
+    // } else {
+    //   changeMore(true);
+    // }
     router.push("/playlist");
   };
   useEffect(() => {
@@ -68,6 +73,7 @@ const EachPlaylist: NextPage<EachPlaylistProps> = ({
     <>
       <Box className="tracklists">
         <h1>{playlistName}</h1>
+        <button onClick={() => onClickBack()}>go back</button>
         {tracks.map((item) => {
           return (
             <Box key={item.track.name} className="tracks-box">
@@ -82,7 +88,6 @@ const EachPlaylist: NextPage<EachPlaylistProps> = ({
             </Box>
           );
         })}
-        <button onClick={() => onClickBack()}>go back</button>
         {more && (
           <>
             <Box ref={myRef} sx={{ textAlign: "center", margin: 4 }}>
