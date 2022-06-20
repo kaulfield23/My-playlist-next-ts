@@ -4,22 +4,6 @@ export type PlaylistTypes = {
   userId: string;
   refreshToken: string;
   expiresIn: string;
-  ssrCode: string | undefined;
-  // items: [
-  //   {
-  //     id: string;
-  //     name: string;
-  //     images: [{ url: string }];
-  //   }
-  // ];
-  // tracks: [
-  //   {
-  //     track: {
-  //       name: string;
-  //       album: { name: string; artists: [{ name: string }] };
-  //     };
-  //   }
-  // ];
 };
 
 export type ListType = {
@@ -34,4 +18,18 @@ export type MyPlaylistProps = {
 
 export type MyTracklistProps = {
   accessToken: string;
+};
+
+export type PlaylistType = {
+  name: string;
+  id: string;
+  images: [{ url: string }];
+};
+
+export type TracksType = {
+  track: {
+    name: "";
+    album: { images: [{ url: "" }] };
+    artists: [{ name: "" }];
+  };
 };

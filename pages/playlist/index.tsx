@@ -3,11 +3,11 @@ import { Grid, Tab } from "@mui/material";
 import { Box } from "@mui/system";
 import Cookies from "cookies";
 import type { GetServerSideProps, NextPage } from "next";
-import { useEffect, useState } from "react";
-import LikedSongs from "../src/components/LikedSongs";
-import MyPlaylists from "../src/components/MyPlaylists";
-import { RefreshingToken } from "../src/components/refreshingToken";
-import { PlaylistTypes } from "../src/types";
+import { useState } from "react";
+import LikedSongs from "../../src/components/LikedSongs";
+import MyPlaylists from "../../src/components/MyPlaylists";
+import { RefreshingToken } from "../../src/components/refreshingToken";
+import { PlaylistTypes } from "../../src/types";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const userId = process.env.SPOTIFY_ID;
@@ -28,7 +28,9 @@ const Playlist: NextPage<PlaylistTypes> = ({ accessToken, userId }) => {
     const refresh: string | null = localStorage.getItem("refresh");
     let expires: string | null | number = localStorage.getItem("expire");
 
-    if (expires !== null) expires = parseInt(expires);
+    if (expires !== null) {
+      expires = parseInt(expires);
+    }
     if (refresh && expires) {
       RefreshingToken(refresh, expires);
     }

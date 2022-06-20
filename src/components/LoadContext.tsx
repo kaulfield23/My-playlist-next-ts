@@ -1,45 +1,68 @@
-import React, { createContext, useState, FC, PropsWithChildren } from "react";
+import { useRouter } from "next/router";
+import React, {
+  createContext,
+  useState,
+  FC,
+  PropsWithChildren,
+  useEffect,
+} from "react";
 import { getPlaylists, getTracks } from "../data/fetchDatas";
+import { PlaylistType, TracksType } from "../types";
 
-type dataType = {
-  name: string;
-  id: string;
-  images: [{ url: string }];
-};
 export type MyContextType = {
   more: boolean;
-  data: dataType[];
-  tracks: any[];
+  data: PlaylistType[];
+  tracks: TracksType[];
   loadPlaylists?: (value: string, value2: string, value3: number) => void;
   loadTracks?: (value: string, value2: string, value3: number) => void;
-  // changePerPage: (value: number) => void;
+  changeMore: (value: boolean) => void;
+  changeTracks: () => void;
 };
 
 const myContextDefaultValues: MyContextType = {
   more: true,
   data: [],
   tracks: [],
-  // after: 0,
-  // changePerPage: (value: number) => ({}),
+  changeMore: (value: boolean) => ({}),
+  changeTracks: () => ({}),
 };
 export const LoadContext = createContext<MyContextType>(myContextDefaultValues);
 
 const LoadProvider: FC<PropsWithChildren<{}>> = ({ children }) => {
-  const [perPage, setPerPage] = useState<number>(6);
   const [data, setData] = useState([]);
   const [tracks, setTracks] = useState([]);
   const [more, setMore] = useState<boolean>(true);
+  const router = useRouter();
 
-  // const changePerPage = (value: number) => setPerPage(value);
+  //to reset the tracks' data when user clicks the back button
+  useEffect(() => {
+    if (router.pathname === "/playlist") {
+      setTracks([]);
+    }
+  }, [router]);
 
+  const changeMore = (value: boolean) => {
+    setMore(value);
+  };
+  const changeTracks = () => {
+    setTracks([]);
+  };
+
+  //for limit and offset
   let after = 0;
+
+  //get the playlists
   const loadPlaylists = async (
     userId: string,
     accessToken: string,
     perPage: number
   ) => {
+    //for saving the data from where it stopped in playlists page
+    if (data.length > 0) {
+      after = data.length;
+    }
     after += perPage;
-    console.log("hey");
+
     let datas = await getPlaylists(
       userId,
       after - perPage,
@@ -50,14 +73,22 @@ const LoadProvider: FC<PropsWithChildren<{}>> = ({ children }) => {
     setData((prevState) => [...prevState, ...datas.items]);
   };
 
+  //get the tracklist
   const loadTracks = async (
     playlistId: string,
     accessToken: string,
     perPage: number
   ) => {
-    console.log("ehy");
-    let datas = await getTracks(playlistId, accessToken);
-    setTracks(datas.items);
+    after += perPage;
+
+    let datas = await getTracks(
+      playlistId,
+      after - perPage,
+      perPage,
+      accessToken
+    );
+    setMore(datas.items.length === perPage);
+    setTracks((prevState) => [...prevState, ...datas.items]);
   };
 
   return (
@@ -66,8 +97,9 @@ const LoadProvider: FC<PropsWithChildren<{}>> = ({ children }) => {
         data,
         more,
         tracks,
-        // changePerPage,
+        changeMore,
         loadPlaylists,
+        changeTracks,
         loadTracks,
       }}
     >
