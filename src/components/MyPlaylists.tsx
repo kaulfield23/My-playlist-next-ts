@@ -3,7 +3,7 @@ import { Box } from "@mui/system";
 import Image from "next/image";
 import React, { FC, useState, useEffect, useContext, useRef } from "react";
 import { MyPlaylistProps } from "../types";
-import { PlaylistContext } from "./LoadContext";
+import { PlaylistContext } from "./PlaylistContext";
 import { useRouter } from "next/router";
 
 const MyPlaylists: FC<MyPlaylistProps> = ({ accessToken, userId }) => {
