@@ -49,7 +49,9 @@ const Navbar = () => {
     const path = router.pathname;
     const pathMenu = ["/playlist", "/idk", "/temporary", "/aboutme"];
     const currentPath = pathMenu.findIndex((item) => item === path);
-    if (!currentPath) return;
+    if (currentPath === -1) {
+      return;
+    }
     setValue(currentPath);
   }, [router]);
 
