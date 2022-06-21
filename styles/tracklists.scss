@@ -1,0 +1,12 @@
+.tracklists {
+    text-align: center;
+    width: 80%;
+    max-width: 1200px;
+    margin: 5rem auto;
+    padding: 3rem;
+    background-color: rgb(183, 218, 214);
+    .tracks-box {
+        display: flex;
+        margin-top: 2rem;
+    }
+}

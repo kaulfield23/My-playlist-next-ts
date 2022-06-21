@@ -1,55 +1,105 @@
-import React, { createContext, useState, FC, PropsWithChildren } from "react";
+import { useRouter } from "next/router";
+import React, {
+  createContext,
+  useState,
+  FC,
+  PropsWithChildren,
+  useEffect,
+} from "react";
+import { getPlaylists, getTracks } from "../data/fetchDatas";
+import { PlaylistType, TracksType } from "../types";
 
-type dataType = {
-  name: string;
-  id: string;
-  images: [{ url: string }];
-};
 export type MyContextType = {
   more: boolean;
-  data: dataType[];
-  load?: (value: string, value2: string) => void;
-  changePerPage: (value: number) => void;
+  data: PlaylistType[];
+  tracks: TracksType[];
+  loadedAll: boolean;
+  loadPlaylists?: (value: string, value2: string, value3: number) => void;
+  loadTracks?: (value: string, value2: string, value3: number) => void;
+  changeMore: (value: boolean) => void;
+  changeTracks: () => void;
+  playlistLoadedAll: (value: boolean) => void;
 };
 
 const myContextDefaultValues: MyContextType = {
   more: true,
   data: [],
-  // after: 0,
-  changePerPage: (value: number) => ({}),
+  tracks: [],
+  loadedAll: false,
+  changeMore: (value: boolean) => ({}),
+  changeTracks: () => ({}),
+  playlistLoadedAll: (value: boolean) => ({}),
 };
 export const LoadContext = createContext<MyContextType>(myContextDefaultValues);
 
 const LoadProvider: FC<PropsWithChildren<{}>> = ({ children }) => {
-  const [perPage, setPerPage] = useState<number>(6);
   const [data, setData] = useState([]);
+  const [loadedAll, setLoadedAll] = useState<boolean>(false);
+  const [tracks, setTracks] = useState([]);
   const [more, setMore] = useState<boolean>(true);
+  const router = useRouter();
 
-  const changePerPage = (value: number) => setPerPage(value);
+  //to reset the tracks' data when user clicks the back button
+  useEffect(() => {
+    if (router.pathname === "/playlist") {
+      setTracks([]);
+    }
+  }, [router]);
 
-  const getPlaylists = async (
-    userId: string,
-    offset: number,
-    limit: number,
-    accessToken: string
-  ): Promise<{ items: [] }> => {
-    return fetch(
-      `https://api.spotify.com/v1/users/${userId}/playlists?limit=${limit}&offset=${offset}`,
-      {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${accessToken}`,
-        },
-      }
-    ).then((response) => response.json());
+  const playlistLoadedAll = (value: boolean) => {
+    setLoadedAll(value);
+  };
+  const changeMore = (value: boolean) => {
+    setMore(value);
+  };
+  const changeTracks = () => {
+    setTracks([]);
   };
 
+  //for limit and offset
   let after = 0;
-  const load = async (userId: string, accessToken: string) => {
+
+  if (router.pathname === "/playlist" && data.length > 0) {
+    after = data.length;
+  }
+  //get the playlists
+  const loadPlaylists = async (
+    userId: string,
+    accessToken: string,
+    perPage: number
+  ) => {
+    //for saving the data from where it stopped in playlists page
+
     after += perPage;
-    let datas = await getPlaylists(userId, after - 6, perPage, accessToken);
+
+    console.log(after, "after");
+
+    let datas = await getPlaylists(
+      userId,
+      after - perPage,
+      perPage,
+      accessToken
+    );
     setMore(datas.items.length === perPage);
     setData((prevState) => [...prevState, ...datas.items]);
+  };
+
+  //get the tracklist
+  const loadTracks = async (
+    playlistId: string,
+    accessToken: string,
+    perPage: number
+  ) => {
+    after += perPage;
+
+    let datas = await getTracks(
+      playlistId,
+      after - perPage,
+      perPage,
+      accessToken
+    );
+    setMore(datas.items.length === perPage);
+    setTracks((prevState) => [...prevState, ...datas.items]);
   };
 
   return (
@@ -57,8 +107,13 @@ const LoadProvider: FC<PropsWithChildren<{}>> = ({ children }) => {
       value={{
         data,
         more,
-        changePerPage,
-        load,
+        tracks,
+        loadedAll,
+        playlistLoadedAll() {},
+        changeMore,
+        loadPlaylists,
+        changeTracks,
+        loadTracks,
       }}
     >
       {children}

@@ -11,10 +11,11 @@ export default async function refreshHandler(
     const refreshToken = req.body.refreshToken;
     const SpotifyApi = new SpotifyWebApi({
       redirectUri: `/playlist`,
-      clientId: "57d2e6a20ac547dab1320ff810ac1b7d",
+      clientId: process.env.CLIENT_ID,
       clientSecret: process.env.CLIENT_SECRET,
       refreshToken,
     });
+
     const data = await SpotifyApi.refreshAccessToken();
     const cookies = new Cookies(req, res);
     cookies.set("session", data.body.access_token);

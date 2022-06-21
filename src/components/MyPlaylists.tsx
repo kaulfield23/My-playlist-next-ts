@@ -2,26 +2,34 @@ import { Button, Grow } from "@mui/material";
 import { Box } from "@mui/system";
 import Image from "next/image";
 import React, { FC, useState, useEffect, useContext, useRef } from "react";
-import EachPlaylist from "./EachPlaylist";
+// import EachPlaylist from "./EachPlaylist";
 import { MyPlaylistProps } from "../types";
 import { LoadContext } from "./LoadContext";
+import { useRouter } from "next/router";
 
 const MyPlaylists: FC<MyPlaylistProps> = ({ accessToken, userId }) => {
   const [showPlaylists, setShowPlaylists] = useState<boolean>(true);
   const [playlistID, setPlaylistID] = useState<string>("");
-  const { changePerPage, load, data, more } = useContext(LoadContext);
-  const perPage = 6;
+  const {
+    loadPlaylists,
+    data,
+    more,
+    changeMore,
+    playlistLoadedAll,
+    loadedAll,
+  } = useContext(LoadContext);
+  const perPage = 10;
 
   const myRef = useRef<HTMLDivElement>(null);
-  const loader = useRef(load);
+  const loader = useRef(loadPlaylists);
+  const router = useRouter();
 
   useEffect(() => {
-    changePerPage(perPage);
     const observer = new IntersectionObserver(
       (entries) => {
         const first = entries[0];
         if (first.isIntersecting) {
-          loader.current?.(userId, accessToken);
+          loader.current?.(userId, accessToken, perPage);
         }
       },
       { threshold: 1 }
@@ -33,58 +41,63 @@ const MyPlaylists: FC<MyPlaylistProps> = ({ accessToken, userId }) => {
     return () => {
       if (currentObserver) observer.unobserve(currentObserver);
     };
-  }, [myRef, userId, accessToken, changePerPage]);
+  }, [myRef, userId, accessToken]);
 
-  const handlePlaylist = (id: string) => {
-    setShowPlaylists(false);
-    setPlaylistID(id);
-  };
+  useEffect(() => {
+    if (!more) {
+      console.log("eng??????");
+      playlistLoadedAll(true);
+    }
+  }, [more, playlistLoadedAll]);
 
-  const handleGoBack = (value: boolean) => {
-    setShowPlaylists(value);
+  const onClickPlaylist = (id: string, playlistName: string) => {
+    changeMore(true);
+    router.push({
+      pathname: `/playlist/${id}`,
+      query: { playlistName: playlistName },
+    });
+    // setShowPlaylists(false);
+    // setPlaylistID(id);
   };
 
   return (
     <>
-      {showPlaylists && (
-        <Box
-          sx={{ display: "flex", flexWrap: "wrap", justifyContent: "center" }}
-        >
-          {data?.map((item, index) => {
-            return (
-              <Grow
-                in={true}
-                key={item.name}
-                style={{ transformOrigin: "0 0 0" }}
-                timeout={parseInt(`${(index % 6) + 2}99`)}
-                className="playlist-box"
+      <Box sx={{ display: "flex", flexWrap: "wrap", justifyContent: "center" }}>
+        {data?.map((item, index) => {
+          return (
+            <Grow
+              in={true}
+              key={item.name}
+              style={{ transformOrigin: "0 0 0" }}
+              timeout={parseInt(`${(index % 6) + 2}99`)}
+              className="playlist-box"
+            >
+              <Box
+                key={index}
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  padding: "0.5rem",
+                  cursor: "pointer",
+                }}
+                onClick={() => onClickPlaylist(item.id, item.name)}
               >
-                <Box
+                <Image
+                  className="playlistsImg"
+                  src={item.images[0].url}
                   key={index}
-                  sx={{
-                    display: "flex",
-                    flexDirection: "column",
-                    padding: "0.5rem",
-                    cursor: "pointer",
-                  }}
-                  onClick={() => handlePlaylist(item.id)}
-                >
-                  <Image
-                    className="playlistsImg"
-                    src={item.images[0].url}
-                    key={index}
-                    alt={"hey"}
-                    width={200}
-                    height={200}
-                  />
-                  <p className="playlist-name">{item.name}</p>
-                </Box>
-              </Grow>
-            );
-          })}
-        </Box>
-      )}
-      {more && (
+                  alt={"hey"}
+                  width={200}
+                  height={200}
+                />
+                <p className="playlist-name">{item.name}</p>
+              </Box>
+            </Grow>
+          );
+        })}
+      </Box>
+
+      {more && !loadedAll && (
         <>
           <Box ref={myRef} sx={{ textAlign: "center", margin: 4 }}>
             <Button variant="contained" color="secondary">
@@ -92,9 +105,6 @@ const MyPlaylists: FC<MyPlaylistProps> = ({ accessToken, userId }) => {
             </Button>
           </Box>
         </>
-      )}
-      {!showPlaylists && (
-        <EachPlaylist goBack={handleGoBack} playlistID={playlistID} />
       )}
     </>
   );
