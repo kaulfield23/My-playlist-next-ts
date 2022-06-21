@@ -70,9 +70,7 @@ const EachPlaylist: NextPage<EachPlaylistProps> = ({
 
   const handleChange = (event: React.SyntheticEvent, newValue: string) => {
     setValue(newValue);
-    console.log(newValue, "here is tracklist tab");
   };
-  console.log(value, "here is tracklist value");
 
   return (
     <>
