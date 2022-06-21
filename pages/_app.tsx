@@ -5,7 +5,7 @@ import { theme } from "../styles/theme";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import Navbar from "../src/components/Navbar";
-import LoadProvider from "../src/components/LoadContext";
+import PlaylistProvider from "../src/components/LoadContext";
 function MyApp({ Component, pageProps }: AppProps) {
   const router = useRouter();
   const path = router.pathname;
@@ -18,10 +18,10 @@ function MyApp({ Component, pageProps }: AppProps) {
       </Head>
       <StyledEngineProvider>
         <ThemeProvider theme={theme}>
-          <LoadProvider>
+          <PlaylistProvider>
             {path !== "/" ? <Navbar /> : ""}
             <Component {...pageProps} />
-          </LoadProvider>
+          </PlaylistProvider>
         </ThemeProvider>
       </StyledEngineProvider>
     </>
