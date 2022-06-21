@@ -33,3 +33,9 @@ export type TracksType = {
     artists: [{ name: "" }];
   };
 };
+
+export type EachPlaylistProps = {
+  playlistID: string;
+  accessToken: string;
+  playlistName: string;
+};

@@ -4,20 +4,13 @@ import Image from "next/image";
 import React, { FC, useState, useEffect, useContext, useRef } from "react";
 // import EachPlaylist from "./EachPlaylist";
 import { MyPlaylistProps } from "../types";
-import { LoadContext } from "./LoadContext";
+import { PlaylistContext } from "./LoadContext";
 import { useRouter } from "next/router";
 
 const MyPlaylists: FC<MyPlaylistProps> = ({ accessToken, userId }) => {
   const [showPlaylists, setShowPlaylists] = useState<boolean>(true);
   const [playlistID, setPlaylistID] = useState<string>("");
-  const {
-    loadPlaylists,
-    data,
-    more,
-    changeMore,
-    playlistLoadedAll,
-    loadedAll,
-  } = useContext(LoadContext);
+  const { loadPlaylists, data, more } = useContext(PlaylistContext);
   const perPage = 10;
 
   const myRef = useRef<HTMLDivElement>(null);
@@ -43,21 +36,11 @@ const MyPlaylists: FC<MyPlaylistProps> = ({ accessToken, userId }) => {
     };
   }, [myRef, userId, accessToken]);
 
-  useEffect(() => {
-    if (!more) {
-      console.log("eng??????");
-      playlistLoadedAll(true);
-    }
-  }, [more, playlistLoadedAll]);
-
   const onClickPlaylist = (id: string, playlistName: string) => {
-    changeMore(true);
     router.push({
       pathname: `/playlist/${id}`,
       query: { playlistName: playlistName },
     });
-    // setShowPlaylists(false);
-    // setPlaylistID(id);
   };
 
   return (
@@ -97,7 +80,7 @@ const MyPlaylists: FC<MyPlaylistProps> = ({ accessToken, userId }) => {
         })}
       </Box>
 
-      {more && !loadedAll && (
+      {more && (
         <>
           <Box ref={myRef} sx={{ textAlign: "center", margin: 4 }}>
             <Button variant="contained" color="secondary">
