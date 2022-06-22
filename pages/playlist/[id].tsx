@@ -1,5 +1,5 @@
 import { TabContext, TabList, TabPanel } from "@mui/lab";
-import { Box, Button, Tab } from "@mui/material";
+import { Box, Button, Grow, Tab } from "@mui/material";
 import Cookies from "cookies";
 import { GetServerSideProps, NextPage } from "next";
 import Image from "next/image";
@@ -87,32 +87,56 @@ const EachPlaylist: NextPage<EachPlaylistProps> = ({
               </TabList>
             </Box>
             <TabPanel value="1">
-              <Box className="tracklists">
-                <h1>{playlistName}</h1>
-                <button onClick={() => onClickBack()}>go back</button>
-                {tracks?.map((item) => {
-                  return (
-                    <Box key={item.track.name} className="tracks-box">
-                      <Image
-                        alt={item.track.name}
-                        src={item.track.album.images[0].url}
-                        width={50}
-                        height={50}
-                      />
-                      <h5>{item.track.name}</h5>
-                      <h5>{item.track.artists[0].name}</h5>
-                    </Box>
-                  );
-                })}
-                {loadMore && (
-                  <>
-                    <Box ref={myRef} sx={{ textAlign: "center", margin: 4 }}>
-                      <Button variant="contained" color="secondary">
-                        Load more
-                      </Button>
-                    </Box>
-                  </>
-                )}
+              <Box className="bg-color-track">
+                <Box className="tracklists">
+                  <h1>{playlistName}</h1>
+                  <Button
+                    variant="contained"
+                    color="info"
+                    onClick={() => onClickBack()}
+                  >
+                    Go back
+                  </Button>
+                  {tracks?.map((item, index) => {
+                    return (
+                      <Grow
+                        key={item.track.name}
+                        style={{ transformOrigin: "0 0 0" }}
+                        timeout={parseInt(`${(index % 15) + 3}99`)}
+                        in={true}
+                      >
+                        <Box className="tracks-box">
+                          <Box className="album-art">
+                            <Image
+                              className="album-art"
+                              alt={item.track.name}
+                              src={item.track.album.images[0].url}
+                              width={50}
+                              height={50}
+                            />
+                          </Box>
+                          <Box className="track-info">
+                            <span className="track-name">
+                              {item.track.name}
+                            </span>
+                            <span className="track-artist">
+                              {item.track.artists[0].name}
+                            </span>
+                          </Box>
+                        </Box>
+                      </Grow>
+                    );
+                  })}
+                  {loadMore && (
+                    <>
+                      <Box ref={myRef} sx={{ textAlign: "center", margin: 4 }}>
+                        <Button variant="contained" color="secondary">
+                          Load more
+                        </Button>
+                      </Box>
+                    </>
+                  )}
+                </Box>
               </Box>
             </TabPanel>
             <TabPanel value="2">
