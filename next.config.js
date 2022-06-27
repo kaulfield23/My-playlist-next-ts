@@ -4,7 +4,8 @@ const nextConfig = {
     images: {
         domains: [
             "mosaic.scdn.co",
-            "i.scdn.co"
+            "i.scdn.co",
+            "platform-lookaside.fbsbx.com"
         ]
     }
 }

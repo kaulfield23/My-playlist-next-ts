@@ -45,8 +45,8 @@ const EachPlaylist: NextPage<EachPlaylistProps> = ({
         if (first.isIntersecting) {
           let result = await loader.current?.(
             playlistID,
-            limit,
             offset,
+            limit,
             accessToken
           );
           setMore(result.more);
