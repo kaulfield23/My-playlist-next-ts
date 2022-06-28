@@ -13,8 +13,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 
 const menus = [
   { name: "PLAYLIST", path: "/playlist" },
-  { name: "IDK", path: "/idk" },
-  { name: "TEMPORARY", path: "/temporary" },
+  { name: "MY PROFILE", path: "/myProfile" },
 ];
 
 const DrawerMUI = () => {
