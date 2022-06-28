@@ -59,7 +59,6 @@ export const getSpecificDatas = async (
   let data;
   let more = true;
 
-  console.log(after - perPage, perPage, "likedSongs");
   let datas = await getDatas(listId, after - perPage, perPage, accessToken);
   more = datas.items.length === perPage;
   data = datas.items;
