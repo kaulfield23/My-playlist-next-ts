@@ -5,7 +5,7 @@ import { theme } from "../styles/theme";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import Navbar from "../src/components/Navbar";
-import PlaylistProvider from "../src/components/LoadContext";
+import PlaylistProvider from "../src/components/PlaylistContext";
 function MyApp({ Component, pageProps }: AppProps) {
   const router = useRouter();
   const path = router.pathname;

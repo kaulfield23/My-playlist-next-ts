@@ -1,12 +1,60 @@
+.bg-color-track {
+    background-color: rgb(183, 218, 214);
+    border-radius: 10px;
+}
+
 .tracklists {
     text-align: center;
     width: 80%;
     max-width: 1200px;
     margin: 5rem auto;
     padding: 3rem;
-    background-color: rgb(183, 218, 214);
+    background-color: aliceblue;
+    border-radius: 10px;
+    @include mobile {
+        width: 100%;
+        margin: 2rem auto;
+        padding: 0;
+    }
+    .album-art {
+        min-width: 50px;
+    }
+    h1 {
+        color: purple;
+        background-color: rgb(226, 243, 207);
+        max-width: 300px;
+        margin: 2rem auto;
+        border-radius: 10px;
+        @include mobile {
+            margin: 2rem auto;
+            padding: 0;
+        }
+    }
     .tracks-box {
         display: flex;
+        align-items: center;
         margin-top: 2rem;
+        @include mobile {
+            padding: 0 0 20px 20px;
+        }
+    }
+    .track-info {
+        display: flex;
+        flex-direction: column;
+        margin-left: 3rem;
+        @include mobile {
+            margin-left: 1rem;
+        }
+        .track-name {
+            font-size: 1.2rem;
+            font-weight: bold;
+            text-align: start;
+            @include mobile {
+                font-size: 1rem;
+            }
+        }
+        .track-artist {
+            text-align: start;
+        }
     }
 }

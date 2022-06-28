@@ -2,14 +2,11 @@ import { Button, Grow } from "@mui/material";
 import { Box } from "@mui/system";
 import Image from "next/image";
 import React, { FC, useState, useEffect, useContext, useRef } from "react";
-// import EachPlaylist from "./EachPlaylist";
 import { MyPlaylistProps } from "../types";
-import { PlaylistContext } from "./LoadContext";
+import { PlaylistContext } from "./PlaylistContext";
 import { useRouter } from "next/router";
 
 const MyPlaylists: FC<MyPlaylistProps> = ({ accessToken, userId }) => {
-  const [showPlaylists, setShowPlaylists] = useState<boolean>(true);
-  const [playlistID, setPlaylistID] = useState<string>("");
   const { loadPlaylists, data, more } = useContext(PlaylistContext);
   const perPage = 10;
 

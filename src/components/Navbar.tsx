@@ -40,16 +40,17 @@ const Navbar = () => {
   const router = useRouter();
   const menus = [
     { name: "Playlist", path: "/playlist" },
-    { name: "IDK", path: "/idk" },
-    { name: "Temporary", path: "/temporary" },
+    { name: "My Profile", path: "/myProfile" },
     { name: "About me", path: "/aboutme" },
   ];
 
   useEffect(() => {
     const path = router.pathname;
-    const pathMenu = ["/playlist", "/idk", "/temporary", "/aboutme"];
+    const pathMenu = ["/playlist", "/myProfile", "/aboutme"];
     const currentPath = pathMenu.findIndex((item) => item === path);
-    if (!currentPath) return;
+    if (currentPath === -1) {
+      return;
+    }
     setValue(currentPath);
   }, [router]);
 

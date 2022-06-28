@@ -1,5 +1,5 @@
 import { useMediaQuery, useTheme, Grid } from "@mui/material";
-import type { NextPage } from "next";
+import type { GetServerSideProps, NextPage } from "next";
 import React, { useEffect, useRef, useState } from "react";
 import profile from "../src/img/profile-pic.jpg";
 import bigProfile from "../src/img/big-profile.jpg";
@@ -10,9 +10,19 @@ import Image from "next/image";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import { useRouter } from "next/router";
 
-const AUTH_URL = `https://accounts.spotify.com/authorize?client_id=4ebf654084b5407daf31bf89ed230345&response_type=code&redirect_uri=http://localhost:3000&scope=streaming%20user-read-email%20user-read-private%20user-library-read%20user-library-modify%20user-read-playback-state%20user-modify-playback-state`;
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const userId = process.env.CLIENT_ID;
+  return {
+    props: { userId },
+  };
+};
 
-const Home: NextPage = () => {
+type HomeType = {
+  userId: string;
+};
+
+const Home: NextPage<HomeType> = ({ userId }) => {
+  const AUTH_URL = `https://accounts.spotify.com/authorize?client_id=${userId}&response_type=code&redirect_uri=http://localhost:3000&scope=streaming%20user-read-email%20user-read-private%20user-library-read%20user-library-modify%20user-read-playback-state%20user-modify-playback-state`;
   const [width, setWidth] = useState<number>(0);
 
   useEffect(() => {

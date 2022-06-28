@@ -39,3 +39,10 @@ export type EachPlaylistProps = {
   accessToken: string;
   playlistName: string;
 };
+
+export type LikedSongsType = {
+  track: {
+    name: "";
+    album: { name: ""; images: [{ url: "" }]; artists: [{ name: "" }] };
+  };
+};
