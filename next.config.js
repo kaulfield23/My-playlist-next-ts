@@ -6,7 +6,8 @@ const nextConfig = {
             "mosaic.scdn.co",
             "i.scdn.co",
             "platform-lookaside.fbsbx.com",
-            "placekitten.com"
+            "placekitten.com",
+            "lineup-images.scdn.co"
         ]
     }
 }

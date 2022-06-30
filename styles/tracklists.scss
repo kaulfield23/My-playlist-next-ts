@@ -58,3 +58,24 @@
         }
     }
 }
+
+.player {
+    position: fixed;
+    bottom: 0px;
+    left: 0px;
+    width: 100%;
+}
+
+.MuiSlider-thumbColorPrimary {
+    display: none;
+}
+
+.MuiSlider-root {
+    height: 15px;
+}
+
+.__1d63smy> {
+    button {
+        color: yellow;
+    }
+}

@@ -1,3 +1,16 @@
 .likedSongs {
-    background-color: purple;
+    background-color: #fae5ef;
+    border-radius: 10px;
+    padding: 50px;
+    display: flex;
+    flex-direction: column;
+    .likedSongs-album-img {
+        min-width: 50px;
+    }
+    .likedSong {
+        background-color: rgb(254, 248, 250);
+        border: rgb(224, 199, 224) solid 5px;
+        border-radius: 5px;
+        margin: 12px;
+    }
 }

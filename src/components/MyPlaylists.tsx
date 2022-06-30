@@ -5,7 +5,6 @@ import React, { FC, useState, useEffect, useContext, useRef } from "react";
 import { MyPlaylistProps } from "../types";
 import { PlaylistContext } from "./PlaylistContext";
 import { useRouter } from "next/router";
-import Player from "./Player";
 
 const MyPlaylists: FC<MyPlaylistProps> = ({ accessToken, userId }) => {
   const { loadPlaylists, data, more } = useContext(PlaylistContext);
