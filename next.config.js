@@ -5,7 +5,8 @@ const nextConfig = {
         domains: [
             "mosaic.scdn.co",
             "i.scdn.co",
-            "platform-lookaside.fbsbx.com"
+            "platform-lookaside.fbsbx.com",
+            "placekitten.com"
         ]
     }
 }

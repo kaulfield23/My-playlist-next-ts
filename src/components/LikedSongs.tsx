@@ -54,11 +54,16 @@ const LikedSongs: FC<MyTracklistProps> = ({ accessToken }) => {
                   flexDirection: "column",
                   padding: "0.5rem",
                 }}
+                className="likedSongs"
                 key={item.track.name}
               >
                 <Image
+                  className="likedSongs-album-img"
                   alt={item.track.name}
-                  src={item.track.album.images[0].url}
+                  src={
+                    item.track.album.images[0]?.url ??
+                    "http://placekitten.com/50/50"
+                  }
                   width={50}
                   height={50}
                 />

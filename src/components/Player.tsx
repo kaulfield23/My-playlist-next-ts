@@ -1,16 +1,29 @@
-import React, { FC } from "react";
+import React, { FC, useEffect, useState } from "react";
 import SpotifyPlayer from "react-spotify-web-playback";
 type PlayerType = {
   accessToken: string;
   trackUri: string;
 };
 const Player: FC<PlayerType> = ({ accessToken, trackUri }) => {
-  if (!accessToken) return null;
+  const [play, setPlay] = useState(false);
+  useEffect(() => {
+    setPlay(true);
+  }, [trackUri]);
+
+  if (!accessToken) {
+    return null;
+  }
+
   return (
     <SpotifyPlayer
       token={accessToken}
-      //   showSaveIcon
-      //   uris={trackUri ? [trackUri] : []}
+      showSaveIcon
+      styles={{ sliderColor: "purple" }}
+      callback={(state) => {
+        if (!state.isPlaying) setPlay(false);
+      }}
+      play={play}
+      uris={trackUri ? [trackUri] : []}
     />
   );
 };

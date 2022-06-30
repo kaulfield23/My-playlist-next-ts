@@ -21,6 +21,7 @@ export const getTracks = async (
   limit: number,
   accessToken: string
 ): Promise<{ items: [] }> => {
+  console.log(playlistId);
   return fetch(
     `https://api.spotify.com/v1/playlists/${playlistId}/tracks?limit=${limit}&offset=${offset}`,
     {
