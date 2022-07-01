@@ -6,6 +6,7 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 import React, { useEffect, useRef, useState } from "react";
 import LikedSongs from "../../src/components/LikedSongs";
+import Player from "../../src/components/Player";
 import { getSpecificDatas } from "../../src/data/fetchDatas";
 import { EachPlaylistProps, TracksType } from "../../src/types";
 
@@ -33,6 +34,11 @@ const EachPlaylist: NextPage<EachPlaylistProps> = ({
   const [tracks, setTracks] = useState<TracksType[]>([]);
   const [loadMore, setMore] = useState(true);
   const [value, setValue] = useState("1");
+  const [playingTrack, setPlayingTrack] = useState("");
+
+  function chooseTrack(track: string) {
+    setPlayingTrack(track);
+  }
 
   const limit = 15;
   const loader = useRef(getSpecificDatas);
@@ -110,13 +116,19 @@ const EachPlaylist: NextPage<EachPlaylistProps> = ({
                             <Image
                               className="album-art"
                               alt={item.track.name}
-                              src={item.track.album.images[0].url}
+                              src={
+                                item.track.album.images[0]?.url ??
+                                "http://placekitten.com/50/50"
+                              }
                               width={50}
                               height={50}
                             />
                           </Box>
                           <Box className="track-info">
-                            <span className="track-name">
+                            <span
+                              className="track-name"
+                              onClick={() => setPlayingTrack(item.track.uri)}
+                            >
                               {item.track.name}
                             </span>
                             <span className="track-artist">
@@ -143,6 +155,7 @@ const EachPlaylist: NextPage<EachPlaylistProps> = ({
               <LikedSongs accessToken={accessToken} />
             </TabPanel>
           </TabContext>
+          <Player accessToken={accessToken} trackUri={playingTrack} />
         </Box>
       </Box>
     </>

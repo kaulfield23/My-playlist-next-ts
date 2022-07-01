@@ -31,6 +31,7 @@ export type TracksType = {
     name: "";
     album: { images: [{ url: "" }] };
     artists: [{ name: "" }];
+    uri: "";
   };
 };
 

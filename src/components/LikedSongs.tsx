@@ -44,7 +44,10 @@ const LikedSongs: FC<MyTracklistProps> = ({ accessToken }) => {
 
   return (
     <>
-      <Box sx={{ display: "flex", flexWrap: "wrap", justifyContent: "center" }}>
+      <Box
+        sx={{ display: "flex", flexWrap: "wrap", justifyContent: "center" }}
+        className="likedSongs"
+      >
         {likedSongs.map((item, index) => {
           return (
             <>
@@ -54,17 +57,25 @@ const LikedSongs: FC<MyTracklistProps> = ({ accessToken }) => {
                   flexDirection: "column",
                   padding: "0.5rem",
                 }}
-                key={item.track.name}
+                className="likedSong"
+                key={index}
               >
-                <Image
-                  alt={item.track.name}
-                  src={item.track.album.images[0].url}
-                  width={50}
-                  height={50}
-                />
-                <span>{item.track.name}</span>
-                <span>{item.track.album.name}</span>
-                <span>{item.track.album.artists[0].name}</span>
+                <Box className="likedSongs-album-img">
+                  <Image
+                    alt={item.track.name}
+                    src={
+                      item.track.album.images[0]?.url ??
+                      "http://placekitten.com/50/50"
+                    }
+                    width={50}
+                    height={50}
+                  />
+                </Box>
+                <Box className="likedSongs-info">
+                  <span>{item.track.name}</span>
+                  <span>{item.track.album.name}</span>
+                  <span>{item.track.album.artists[0].name}</span>
+                </Box>
               </Box>
             </>
           );

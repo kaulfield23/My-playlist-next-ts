@@ -64,7 +64,7 @@ const MyPlaylists: FC<MyPlaylistProps> = ({ accessToken, userId }) => {
               >
                 <Image
                   className="playlistsImg"
-                  src={item.images[0].url}
+                  src={item.images[0]?.url ?? "http://placekitten.com/50/50"}
                   key={index}
                   alt={"hey"}
                   width={200}

@@ -49,6 +49,7 @@
             font-size: 1.2rem;
             font-weight: bold;
             text-align: start;
+            cursor: pointer;
             @include mobile {
                 font-size: 1rem;
             }
@@ -58,3 +59,34 @@
         }
     }
 }
+
+.player {
+    position: fixed;
+    bottom: 0px;
+    left: 0px;
+    width: 100%;
+    display: flex;
+}
+
+.MuiSlider-thumbColorPrimary {
+    display: none;
+}
+
+.MuiSlider-root {
+    height: 15px;
+}
+
+.volume {
+    // position: absolute;
+    padding-right: 50px;
+    padding-top: 8px;
+    background-color: #e0eae8;
+}
+
+._VolumeRSWP {
+    display: none;
+}
+
+// .custom {
+//     display: flex;
+// }

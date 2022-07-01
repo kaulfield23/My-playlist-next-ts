@@ -1,16 +1,18 @@
 import { TabContext, TabList, TabPanel } from "@mui/lab";
-import { Grid, Tab } from "@mui/material";
+import { Tab } from "@mui/material";
 import { Box } from "@mui/system";
 import Cookies from "cookies";
 import type { GetServerSideProps, NextPage } from "next";
 import { useState } from "react";
 import LikedSongs from "../../src/components/LikedSongs";
 import MyPlaylists from "../../src/components/MyPlaylists";
+import Player from "../../src/components/Player";
 import { RefreshingToken } from "../../src/components/refreshingToken";
 import { PlaylistTypes } from "../../src/types";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const userId = process.env.SPOTIFY_ID;
+  console.log(userId, "id");
   const cookies = new Cookies(context.req, context.res);
   const accessToken = cookies.get("session") ?? "";
   return {

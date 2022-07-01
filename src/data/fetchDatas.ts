@@ -21,6 +21,7 @@ export const getTracks = async (
   limit: number,
   accessToken: string
 ): Promise<{ items: [] }> => {
+  console.log(playlistId);
   return fetch(
     `https://api.spotify.com/v1/playlists/${playlistId}/tracks?limit=${limit}&offset=${offset}`,
     {
@@ -59,7 +60,6 @@ export const getSpecificDatas = async (
   let data;
   let more = true;
 
-  console.log(after - perPage, perPage, "likedSongs");
   let datas = await getDatas(listId, after - perPage, perPage, accessToken);
   more = datas.items.length === perPage;
   data = datas.items;
