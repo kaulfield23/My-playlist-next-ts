@@ -45,5 +45,6 @@ export type LikedSongsType = {
   track: {
     name: "";
     album: { name: ""; images: [{ url: "" }]; artists: [{ name: "" }] };
+    uri: "";
   };
 };

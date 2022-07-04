@@ -1,18 +1,20 @@
-import { Button } from "@mui/material";
+import { Button, Zoom } from "@mui/material";
 import { Box } from "@mui/system";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import React, { FC, useEffect, useRef, useState } from "react";
 import { getSpecificDatas } from "../data/fetchDatas";
 import { LikedSongsType, MyTracklistProps } from "../types";
+import Player from "./Player";
 
 const LikedSongs: FC<MyTracklistProps> = ({ accessToken }) => {
   const [likedSongs, setLikedSongs] = useState<LikedSongsType[]>([]);
   const [loadMore, setLoadMore] = useState(true);
+  const [playingTrack, setPlayingTrack] = useState("");
+
   const limit = 15;
   const myRef = useRef<HTMLDivElement>(null);
   const loader = useRef(getSpecificDatas);
-  const router = useRouter();
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -50,7 +52,11 @@ const LikedSongs: FC<MyTracklistProps> = ({ accessToken }) => {
       >
         {likedSongs.map((item, index) => {
           return (
-            <>
+            <Zoom
+              in={true}
+              timeout={parseInt(`${(index % 15) + 3}99`)}
+              key={`likedsong-${index}`}
+            >
               <Box
                 sx={{
                   display: "flex",
@@ -58,7 +64,6 @@ const LikedSongs: FC<MyTracklistProps> = ({ accessToken }) => {
                   padding: "0.5rem",
                 }}
                 className="likedSong"
-                key={index}
               >
                 <Box className="likedSongs-album-img">
                   <Image
@@ -70,14 +75,23 @@ const LikedSongs: FC<MyTracklistProps> = ({ accessToken }) => {
                     width={50}
                     height={50}
                   />
+                  <h3
+                    className="likedSongs-track-name"
+                    onClick={() => setPlayingTrack(item.track.uri)}
+                  >
+                    {item.track.name}
+                  </h3>
                 </Box>
-                <Box className="likedSongs-info">
-                  <span>{item.track.name}</span>
-                  <span>{item.track.album.name}</span>
-                  <span>{item.track.album.artists[0].name}</span>
+                <Box className="likedSongs-info" sx={{ marginTop: 2 }}>
+                  <Box sx={{ margin: "0 30px 0 4px", color: "purple" }}>
+                    <h5>{item.track.album.artists[0].name}</h5>
+                  </Box>
+                  <Box>
+                    <span>{item.track.album.name}</span>
+                  </Box>
                 </Box>
               </Box>
-            </>
+            </Zoom>
           );
         })}
       </Box>
@@ -90,6 +104,7 @@ const LikedSongs: FC<MyTracklistProps> = ({ accessToken }) => {
           </Box>
         </>
       )}
+      <Player accessToken={accessToken} trackUri={playingTrack} />
     </>
   );
 };
