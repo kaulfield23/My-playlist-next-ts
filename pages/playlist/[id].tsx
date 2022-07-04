@@ -36,10 +36,6 @@ const EachPlaylist: NextPage<EachPlaylistProps> = ({
   const [value, setValue] = useState("1");
   const [playingTrack, setPlayingTrack] = useState("");
 
-  function chooseTrack(track: string) {
-    setPlayingTrack(track);
-  }
-
   const limit = 15;
   const loader = useRef(getSpecificDatas);
   const router = useRouter();

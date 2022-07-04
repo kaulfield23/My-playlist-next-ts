@@ -3,6 +3,7 @@
 @import "playlists";
 @import "tracklists";
 @import "likedSongs";
+@import "player";
 * {
     box-sizing: border-box;
     text-decoration: none;
@@ -13,7 +14,6 @@
 }
 
 body {
-    // background-color: rgb(210, 248, 223);
     background-color: rgb(228, 247, 234);
     height: 100vh;
 }

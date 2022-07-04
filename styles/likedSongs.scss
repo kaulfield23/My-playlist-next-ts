@@ -6,11 +6,23 @@
     flex-direction: column;
     .likedSongs-album-img {
         min-width: 50px;
+        display: flex;
+        align-items: center;
+        .likedSongs-track-name {
+            margin-left: 20px;
+            cursor: pointer;
+        }
     }
     .likedSong {
         background-color: rgb(254, 248, 250);
         border: rgb(224, 199, 224) solid 5px;
         border-radius: 5px;
         margin: 12px;
+        &:hover {
+            background-color: #fbf9d9;
+        }
+    }
+    .likedSongs-info {
+        display: flex;
     }
 }
