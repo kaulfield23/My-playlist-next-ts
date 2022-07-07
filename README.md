@@ -12,7 +12,7 @@ CLIENT_SECRET = Spotify web api account's password in dashboard.
 SPOTIFY_ID = Your spotify ID.
 ```
 
-# Get Client ID and secret
+# Get Client ID and secret in dashboard
 
 https://developer.spotify.com/documentation/web-api/
 
