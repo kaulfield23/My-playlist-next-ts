@@ -29,3 +29,17 @@ https://developer.spotify.com/documentation/web-api/
 - How to use Spotify API
 - Refresh token when it expires
 - SSR by using getServerSideProps of Next.js
+
+
+# Other previews
+- Player
+![image](https://user-images.githubusercontent.com/77925373/177781765-788a5f51-de70-45ff-817d-4fce760b6ed7.png)
+- Liked songs ( If you didn't subscribe Spotify Premium, then you will see this message in player)
+![image](https://user-images.githubusercontent.com/77925373/177782012-c37bb201-6f80-480c-b944-9e9769793385.png)
+- My Profile (fetches info from Spotify)
+![image](https://user-images.githubusercontent.com/77925373/177782362-c7843c01-391b-4b3e-9922-4784cee30fb9.png)
+- About me
+![image](https://user-images.githubusercontent.com/77925373/177782586-a802410d-456e-4783-8343-1849070ebc74.png)
+
+
+
