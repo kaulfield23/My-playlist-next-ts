@@ -1,6 +1,7 @@
 import { Box } from "@mui/system";
 import type { NextPage } from "next";
 import Image from "next/image";
+import Link from "next/link";
 import profile from "../src/img/haeju.png";
 const aboutMe: NextPage = () => {
   return (
@@ -23,10 +24,15 @@ const aboutMe: NextPage = () => {
         <Box sx={{ textAlign: "center", padding: 3 }}>
           <Image src={profile} alt="haeju" />
           <h3> Name: Haeju Eom</h3>
-          <h3> </h3>
-          <h3> - Material UI</h3>
-          <h3> - Refresh token when it expires</h3>
-          <h3> - SSR by using getServerSideProps of Next.js</h3>
+          <h3> Age: 30</h3>
+          <h3> Hobby : Drawing, Gaming, Watching movie</h3>
+          <h3>
+            Github :{" "}
+            <Link href="https://github.com/kaulfield23">
+              https://github.com/kaulfield23
+            </Link>
+          </h3>
+          <h3> School : Lernia YH</h3>
         </Box>
         <Box sx={{ color: "purple", m: 2 }}>
           <h2>What I learned through this project</h2>
