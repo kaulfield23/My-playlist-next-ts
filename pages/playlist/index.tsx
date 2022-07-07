@@ -12,7 +12,6 @@ import { PlaylistTypes } from "../../src/types";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const userId = process.env.SPOTIFY_ID;
-  console.log(userId, "id");
   const cookies = new Cookies(context.req, context.res);
   const accessToken = cookies.get("session") ?? "";
   return {

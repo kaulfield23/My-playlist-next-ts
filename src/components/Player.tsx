@@ -24,7 +24,6 @@ const Player: FC<PlayerType> = ({ accessToken, trackUri }) => {
   useEffect(() => {
     const timer = setTimeout(() => {
       const changeVolume = async () => {
-        console.log(value, accessToken, play, "eee");
         try {
           await fetch(
             `https://api.spotify.com/v1/me/player/volume?volume_percent=${value}`,

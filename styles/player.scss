@@ -1,26 +1,28 @@
 .player {
-    position: fixed;
-    bottom: 0px;
-    left: 0px;
-    width: 100%;
-    display: flex;
+  position: fixed;
+  bottom: 0px;
+  left: 0px;
+  width: 100%;
+  display: flex;
 }
 
 .MuiSlider-thumbColorPrimary {
-    display: none;
+  display: none;
 }
 
 .MuiSlider-root {
-    height: 15px;
+  height: 15px;
 }
 
 .volume {
-    // position: absolute;
-    padding-right: 50px;
-    padding-top: 8px;
-    background-color: #e0eae8;
+  padding-right: 50px;
+  padding-top: 8px;
+  background-color: #e0eae8;
+  @include mobile {
+    padding-right: 20px;
+  }
 }
 
 ._VolumeRSWP {
-    display: none;
+  display: none;
 }
