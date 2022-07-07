@@ -2,7 +2,6 @@ import { useEffect } from "react";
 
 export async function RefreshingToken(refreshToken: string, expiresIn: number) {
   useEffect(() => {
-    console.log(expiresIn, "expire");
     const fetchData = () => {
       const interval = setInterval(async () => {
         const res = await fetch(`/api/refresh`, {

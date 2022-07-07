@@ -79,7 +79,15 @@ const MyPlaylists: FC<MyPlaylistProps> = ({ accessToken, userId }) => {
 
       {more && (
         <>
-          <Box ref={myRef} sx={{ textAlign: "center", margin: 4 }}>
+          <Box
+            ref={myRef}
+            sx={{ textAlign: "center", margin: 4 }}
+            onClick={() => {
+              if (loadPlaylists) {
+                loadPlaylists(userId, accessToken, perPage);
+              }
+            }}
+          >
             <Button variant="contained" color="secondary">
               Load more
             </Button>

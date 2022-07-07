@@ -47,7 +47,12 @@ const LikedSongs: FC<MyTracklistProps> = ({ accessToken }) => {
   return (
     <>
       <Box
-        sx={{ display: "flex", flexWrap: "wrap", justifyContent: "center" }}
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          maxWidth: "1200px",
+          margin: "0 auto",
+        }}
         className="likedSongs"
       >
         {likedSongs.map((item, index) => {
@@ -83,7 +88,10 @@ const LikedSongs: FC<MyTracklistProps> = ({ accessToken }) => {
                   </h3>
                 </Box>
                 <Box className="likedSongs-info" sx={{ marginTop: 2 }}>
-                  <Box sx={{ margin: "0 30px 0 4px", color: "purple" }}>
+                  <Box
+                    sx={{ margin: "0 30px 0 4px", color: "purple" }}
+                    className="little-space"
+                  >
                     <h5>{item.track.album.artists[0].name}</h5>
                   </Box>
                   <Box>

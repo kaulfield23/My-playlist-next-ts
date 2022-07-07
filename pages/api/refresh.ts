@@ -7,7 +7,6 @@ export default async function refreshHandler(
   res: NextApiResponse
 ) {
   try {
-    console.log("wee");
     const refreshToken = req.body.refreshToken;
     const SpotifyApi = new SpotifyWebApi({
       redirectUri: `/playlist`,

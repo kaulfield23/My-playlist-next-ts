@@ -43,8 +43,6 @@ const PlaylistProvider: FC<PropsWithChildren<{}>> = ({ children }) => {
     //for saving the data from where it stopped in playlists page
     after += perPage;
 
-    console.log(after, "after");
-
     let datas = await getPlaylists(
       userId,
       after - perPage,
