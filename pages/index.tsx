@@ -1,6 +1,6 @@
 import { useMediaQuery, useTheme, Grid } from "@mui/material";
 import type { GetServerSideProps, NextPage } from "next";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import profile from "../src/img/profile-pic.jpg";
 import bigProfile from "../src/img/big-profile.jpg";
 import Button from "@mui/material/Button";

@@ -1,7 +1,6 @@
 import { Button, Zoom } from "@mui/material";
 import { Box } from "@mui/system";
 import Image from "next/image";
-import { useRouter } from "next/router";
 import React, { FC, useEffect, useRef, useState } from "react";
 import { getSpecificDatas } from "../data/fetchDatas";
 import { LikedSongsType, MyTracklistProps } from "../types";
@@ -14,16 +13,15 @@ const LikedSongs: FC<MyTracklistProps> = ({ accessToken }) => {
 
   const limit = 15;
   const myRef = useRef<HTMLDivElement>(null);
-  const loader = useRef(getSpecificDatas);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
       async (entries) => {
         const first = entries[0];
         const offset = likedSongs.length + limit;
-
+        
         if (first.isIntersecting) {
-          let result = await loader.current?.(
+          let result = await getSpecificDatas(
             "likedSongs",
             offset,
             limit,

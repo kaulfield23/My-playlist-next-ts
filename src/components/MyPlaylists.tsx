@@ -11,15 +11,14 @@ const MyPlaylists: FC<MyPlaylistProps> = ({ accessToken, userId }) => {
   const perPage = 10;
 
   const myRef = useRef<HTMLDivElement>(null);
-  const loader = useRef(loadPlaylists);
   const router = useRouter();
 
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
         const first = entries[0];
-        if (first.isIntersecting) {
-          loader.current?.(userId, accessToken, perPage);
+        if (first.isIntersecting  && loadPlaylists !== undefined) {
+          loadPlaylists(userId,accessToken, perPage)
         }
       },
       { threshold: 1 }

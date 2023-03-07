@@ -28,10 +28,10 @@ export type PlaylistType = {
 
 export type TracksType = {
   track: {
-    name: "";
-    album: { images: [{ url: "" }] };
-    artists: [{ name: "" }];
-    uri: "";
+    name: string;
+    album: { images: [{ url: string }] };
+    artists: [{ name: string }];
+    uri: string;
   };
 };
 
@@ -43,8 +43,8 @@ export type EachPlaylistProps = {
 
 export type LikedSongsType = {
   track: {
-    name: "";
-    album: { name: ""; images: [{ url: "" }]; artists: [{ name: "" }] };
-    uri: "";
+    name: string;
+    album: { name: string; images: [{ url: string }]; artists: [{ name: string }] };
+    uri: string;
   };
 };
